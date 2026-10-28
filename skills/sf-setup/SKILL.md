@@ -37,7 +37,7 @@ Lead each question with the recommended answer, so the user can accept it in a w
 | `github` | Team wants every task visible on GitHub | [tracker-github.md](tracker-github.md) |
 | `local` | No GitHub remote, or solo work | [tracker-local.md](tracker-local.md) |
 
-`github` and `hybrid` need a reachable GitHub repo. If there is no remote, get the URL, run `git remote add origin <url>`, and check that `gh repo view` prints the repo before going on. If it can't, stop and say what's missing.
+`github` and `hybrid` need a reachable GitHub repo. `sf-new-project` normally set the remote already; if there is none, recommend `local`, or get the URL, run `git remote add origin <url>`, and check that `gh repo view` prints the repo before going on. If it can't, stop and say what's missing.
 
 **Section B: Git strategy.**
 
@@ -76,7 +76,7 @@ Show a draft of both files, with the adapter's `{{…}}` placeholders filled in,
 - Set `"tracker"` and `"git"` in `factory.json`.
 - `hybrid`: add `.scratch/` to `.gitignore` if it isn't there.
 - `develop-main`: copy [workflows/back-merge.yml](workflows/back-merge.yml) to `.github/workflows/back-merge.yml`. `.github/workflows/pr-guard.yml` is already in the template and serves both strategies.
-- `develop-main` with a remote and no `develop` branch: **ask before pushing.** On yes, run `git push origin main:develop`. Never push without that yes.
+- `develop-main` with a remote and no `develop` branch: if the repo has a commit, **ask before pushing**, and on yes run `git push origin main:develop`. If it has no commit yet (run from `sf-new-project`), don't push; `sf-new-project` creates `develop` after its first push. Never push without a yes.
 - `main`: delete `.github/workflows/back-merge.yml` if a previous run created it.
 - Create the labels the repo lacks (`gh label create`): the tracker adapter's labels, plus `main to develop sync` for `develop-main`.
 - Conversation log: set `"conversations": {"mode": "local|committed|off", "auto": true|false, "dir": "docs/conversations"}` in `factory.json`.

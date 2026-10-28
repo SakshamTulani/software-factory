@@ -7,7 +7,7 @@ description: "This project's lifecycle — which changes need a spec, the sf-spe
 
 The lifecycle skills in `.agents/skills/` come from sf-factory (an adapted fork of Addy Osmani's agent-skills), installed with the `skills` CLI and pinned by `skills-lock.json`. This skill sets which changes need which steps and where the artifacts live.
 
-**Updating factory skills:** `DISABLE_TELEMETRY=1 npx -y skills@1.7.4 check` shows when sf-factory has newer versions; `npx -y skills@1.7.4 update` pulls them in, and the diff goes through a PR like any change. Don't edit a factory skill in place, because the next update overwrites it. To change one for this project only, copy it to a new name (`build-<client>`); to change it for every project, change it in sf-factory.
+**Updating factory skills:** on a branch, run `DISABLE_TELEMETRY=1 npx -y skills@1.7.4 update -y`, review `git diff .agents/skills skills-lock.json`, and merge it through a PR like any change. `skills check` in this CLI version applies updates too, so treat it the same way. Don't edit a factory skill in place, because the next update overwrites it. To change one for this project only, copy it to a new name (`build-<client>`); to change it for every project, change it in sf-factory.
 
 ## Which path a change takes
 

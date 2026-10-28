@@ -38,12 +38,16 @@ Lead with the recommended answer where there is one, so the user can accept it i
    | `frontend/react-rspack` | Rspack, React 19, TanStack Query (store-owned cache), WebSocket client, Tailwind v4 + shadcn, React Router 7, Zustand, Vitest + RTL + MSW, Biome, dependency-cruiser |
 5. **Design system** (frontend only): list `design-systems/README.md`'s table. Recommend `intellicar-default`.
 6. **Project name**: kebab-case. Recommend `<client>-<product>`.
+7. **Git remote**: where the repo will live.
+   - **An existing empty repo** (recommended when one was already created): take its URL, SSH (`git@github.com:<owner>/<name>.git`) or HTTPS.
+   - **Create one now**: ask for the owner (user or org) and confirm `<owner>/<project-name>`, private. Creating a repo is visible to others, so create it only after the user says yes in step 3.
+   - **None for now**: the project stays local; `sf-setup` will then recommend the `local` tracker.
 
-The tracker and git strategy are asked by `sf-setup` in step 7.
+The tracker, git strategy and conversation log are asked by `sf-setup` in step 7.
 
 ## 3. Confirm
 
-Show the answers and what will be written. Let the user correct anything before you write.
+Show the answers and what will be written, including any repo to be created. Let the user correct anything before you write.
 
 ## 4. Write the files
 
@@ -54,6 +58,10 @@ Show the answers and what will be written. Let the user correct anything before 
 5. Fill `docs/client.md` and `docs/product.md` from the answers. Keep their headings. Write "TBD" under any heading you have no answer for, so nothing is invented.
 6. `chmod +x .claude/hooks/*.sh`.
 7. If this isn't a git repo, run `git init -b main`.
+8. Set the remote from question 7:
+   - Existing repo: `git remote add origin <url>`.
+   - Create: `gh repo create <owner>/<project-name> --private`, then `git remote add origin git@github.com:<owner>/<project-name>.git` (HTTPS if the user's git uses HTTPS).
+   - Then run `git ls-remote origin`. If it fails, report the error and continue without a remote; the user can add it later. If it succeeds and prints nothing, the repo is empty: carry on. If it prints any refs, the remote already has history: stop and ask, because this skill starts a repo from scratch and won't merge into existing history.
 
 ## 5. Install the project's skills
 
@@ -93,5 +101,8 @@ Run the `sf-setup` skill. It asks about the tracker, the git strategy and the co
 - Run `pnpm install` (it fetches the private `intellicars/fmswsclientjs`, so it needs the same git access as step 1), then `pnpm check` and `pnpm build`, and report the result. A fresh project must be green: no modules, the shell's own tests passing.
 - If the design system isn't `intellicar-default`, re-map the tokens in `src/index.css` from the new `DESIGN.md` with the `shadcn` skill ("apply this DESIGN.md"). The template's `index.css` carries `intellicar-default`'s tokens.
 - Tell the user to copy `.env.example` to `.env` and fill in the URLs, and, for CI, to add a read-only `GH_PAT` repository secret so `.github/workflows/ci.yml` can fetch `fmswsclientjs`.
-- Show `git status`. Offer the first commit (`chore: create project from sf-factory`), but don't commit or push unless the user says so.
+- Show `git status`, then offer, as one question, to commit and push. Do neither without a yes.
+  1. `git add -A && git commit -m "chore: create project from sf-factory"`.
+  2. With a remote: `git push -u origin main`. For the `develop-main` strategy also `git push origin main:develop`; `sf-setup` couldn't create `develop` earlier because the repo had no commit yet.
+  3. Point to the branch protection `docs/agents/git.md` recommends, and the `GH_PAT` secret CI needs. Both are repository settings the user sets.
 - Tell the user what comes next: describe the first feature with `/sf-spec`.

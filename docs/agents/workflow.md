@@ -19,4 +19,4 @@ ls .agents/skills && cat skills-lock.json
 
 ## Releasing
 
-Merge to `main`. Projects see the change at `npx -y skills@1.7.4 check` and take it with `npx -y skills@1.7.4 update`, as a reviewed PR.
+Merge to `main`. Projects take the change with `npx -y skills@1.7.4 update` on a branch, as a reviewed PR. `skills check` in 1.7.4 applies updates as well, so it can't serve as a read-only CI gate.
