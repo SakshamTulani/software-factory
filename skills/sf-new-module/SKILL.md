@@ -32,8 +32,9 @@ src/modules/<name>/
 ├── store/<camel>Store.test.ts
 ├── hooks/                           empty until a task adds a hook (one hook per file)
 ├── ui/                              empty until a task adds a component
-├── module.tsx                       featureId '<name>' and an empty route list, like existing modules
-└── index.ts                         export only what app/ or other modules need (module.tsx's export)
+├── module.tsx                       export const <camel>Module: AppModule = { featureId: "<name>", title: "<Title>", routes: [] }
+│                                    (AppModule from "@/shared/lib/app-module")
+└── index.ts                         export { <camel>Module } from "./module"; nothing else yet
 ```
 
 Each `*.test.ts` stub holds one `describe` naming the layer and a single `it.todo("…")`. Never write a passing test with no assertion; the plan's tasks replace the todos.
@@ -42,7 +43,7 @@ Empty folders (`hooks/`, `ui/`) get a `.gitkeep`.
 
 ## Register it
 
-Add the module where `src/app/` registers modules, matching how the existing modules are registered. If there is no registration point yet, stop and report it; don't invent one.
+In `src/app/modules.ts`, import `<camel>Module` from `"@/modules/<name>"` and add it to the `modules` list. The router mounts it at `/<name>/*` and adds it to the navigation.
 
 ## Verify
 

@@ -90,6 +90,8 @@ Run the `sf-setup` skill. It asks about the tracker, the git strategy and the co
 
 ## 8. Done
 
-- If the project has a `package.json`, run `pnpm install` and `pnpm check`, and report the result.
+- Run `pnpm install` (it fetches the private `intellicars/fmswsclientjs`, so it needs the same git access as step 1), then `pnpm check` and `pnpm build`, and report the result. A fresh project must be green: no modules, the shell's own tests passing.
+- If the design system isn't `intellicar-default`, re-map the tokens in `src/index.css` from the new `DESIGN.md` with the `shadcn` skill ("apply this DESIGN.md"). The template's `index.css` carries `intellicar-default`'s tokens.
+- Tell the user to copy `.env.example` to `.env` and fill in the URLs, and, for CI, to add a read-only `GH_PAT` repository secret so `.github/workflows/ci.yml` can fetch `fmswsclientjs`.
 - Show `git status`. Offer the first commit (`chore: create project from sf-factory`), but don't commit or push unless the user says so.
 - Tell the user what comes next: describe the first feature with `/sf-spec`.

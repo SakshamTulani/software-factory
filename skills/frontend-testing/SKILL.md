@@ -23,7 +23,7 @@ Before review, the `test-engineer` agent checks the tests against the rules on t
 | `hooks` | `renderHook` | store with a real `QueryClient` + fake socket |
 | `ui` and user flows | integration (RTL) | MSW for REST + fake socket; never mock hooks |
 
-The fake socket lives in `src/shared/realtime/testing.ts`. Every store test uses it.
+The fake socket is `createFakeRealtimeConnection()` from `src/shared/realtime/testing.ts`: `emit(channel, topic, payload)` delivers a message (payload JSON-encoded, as the real connection delivers bytes), `setStatus()` flips the connection, `subscriptions()` lists what's subscribed. Every store test uses it. `src/shared/realtime/connection.test.ts` shows the style.
 
 ## Rules
 

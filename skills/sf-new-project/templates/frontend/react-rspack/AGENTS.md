@@ -4,12 +4,14 @@
 
 ## Commands
 
-pnpm workspace. Run everything from the repo root.
+Single pnpm package. Run everything from the repo root.
 
 ```bash
-pnpm dev          # dev server
+pnpm install      # needs git access to intellicars/fmswsclientjs (SSH key or gh auth setup-git)
+pnpm dev          # dev server on :3000; copy .env.example to .env first
 pnpm check        # Definition of Done: typecheck + lint + depcruise + test
 pnpm depcruise    # architecture rules only (.dependency-cruiser.cjs)
+pnpm format       # Biome: format and sort imports
 ```
 
 ## Rules for every task

@@ -16,3 +16,4 @@ Decisions that shape the factory and every project it generates. Numbered and ne
 | [0010](0010-distribute-with-the-skills-cli.md) | accepted | Everything ships as skills via the `skills` CLI; `sf-` prefix; Stop hook runs `pnpm check`; no session-start router |
 | [0011](0011-conversation-logs-chosen-per-project.md) | accepted | Conversation logs are chosen per project (`local` default, `committed`, `off`), saved by `sf-transcribe` with date-author-topic names |
 | [0012](0012-save-the-conversation-after-every-turn.md) | accepted | Automatic conversation saving runs from the `Stop` hook after every turn, not `SessionEnd` |
+| [0013](0013-the-app-shell.md) | accepted | The react-rspack shell ships with no modules; stores import from `@tanstack/react-query`; dependency-cruiser 18 for TypeScript 6 |

@@ -11,7 +11,7 @@ Every rule on this page that can be checked is checked by `pnpm depcruise` ([.de
 
 ```
 src/
-├── app/        # providers, QueryClient, router, store wiring (the composition root)
+├── app/        # the composition root: providers, queryClient.ts, router.tsx, and modules.ts (the module registry)
 ├── modules/    # one folder per product module (command-center, live-tracking, …)
 ├── shared/     # used by any module; imports no module
 │   ├── api/        # httpClient
@@ -38,7 +38,7 @@ modules/<module>/
 ├── api/             # raw REST calls + their DTO types
 │ ── CONTRACT ──
 ├── types.ts         # domain entity types, no logic; every tier may import it
-├── module.tsx       # featureId + routes
+├── module.tsx       # exports an AppModule: featureId, title, routes (registered in src/app/modules.ts)
 └── index.ts         # the module's public API
 ```
 
@@ -69,6 +69,9 @@ All server data the UI reads lives in the TanStack Query cache, and **only the s
 
 ```ts
 // store/commandCenterStore.ts
+// queryOptions is a typing helper from @tanstack/react-query; the store never renders or calls hooks.
+import { type QueryClient, queryOptions } from "@tanstack/react-query"
+
 export class CommandCenterStore {
   constructor(private deps: { qc: QueryClient; repo: CommandCenterRepository; socket: CommandCenterSocket }) {
     deps.socket.onLiveInfo(batch((deltas) =>

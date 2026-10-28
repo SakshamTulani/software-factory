@@ -18,6 +18,7 @@ Adding a template means a row here and a row in `sf-new-project`'s template tabl
 - `.github/workflows/pr-guard.yml` and `.github/pull_request_template.md`.
 - `.claude/settings.json` and `.claude/hooks/check-on-stop.sh`: the Stop hook that refuses to end a turn while `pnpm check` is red.
 - `.dependency-cruiser.cjs`, and a `check` script that is the Definition of Done.
+- The app shell (react-rspack): `package.json` with exact versions, `pnpm-lock.yaml`, the Rspack, TypeScript, Biome and Vitest configs, `src/app/` (providers, router, `modules.ts` registry) and `src/shared/` (HTTP client, env, `cn`, the realtime connection and its fake). No modules: a project's first module comes from its first spec.
 
 Placeholders `sf-new-project` fills: `{{PROJECT_NAME}}`, `{{CLIENT_NAME}}`, `{{PRODUCT_NAME}}`, `{{ONE_SENTENCE_DESCRIPTION}}`.
 
@@ -34,6 +35,8 @@ So put rules that will change into a skill. Keep template files to what tools ne
 
 - Change the enforcement and the skill that describes it together. `frontend-architecture` and `.dependency-cruiser.cjs` must not disagree.
 - Run the dependency-cruiser config against a fixture: one valid module that must pass, plus one deliberate violation per rule that must fail.
+- Changing `package.json`: generate a project, run `pnpm install`, and copy its `pnpm-lock.yaml` back into the template. Then check a fresh project passes `pnpm install --frozen-lockfile`, `pnpm check` and `pnpm build`, and that `pnpm depcruise` reports a non-zero module count.
+- Pick versions at least a week old; pnpm 11 rejects very fresh releases and writes exemptions into the project.
 - Root `AGENTS.md` stays essentials-only.
 
 ## Design systems

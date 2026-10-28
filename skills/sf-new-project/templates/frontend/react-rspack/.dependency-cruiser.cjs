@@ -161,7 +161,8 @@ module.exports = {
       severity: "warn",
       from: {
         orphan: true,
-        pathNot: ["\\.d\\.ts$", TEST, "(^|/)\\.[^/]+\\.(c?js|json)$"],
+        // Test setup and shared helpers (cn, the fake socket) exist before anything imports them.
+        pathNot: ["\\.d\\.ts$", TEST, "(^|/)\\.[^/]+\\.(c?js|json)$", "^src/test/", "^src/shared/"],
       },
       to: {},
     },

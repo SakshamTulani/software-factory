@@ -1,0 +1,42 @@
+# Runs the Definition of Done (pnpm check) and a production build on every PR
+# into main or develop. Require the "check" job in branch protection.
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # GH_PAT is only for the private fmswsclientjs dependency (as in fms-ui).
+      # Install scripts can read it, so make it a fine-grained, read-only token.
+      - name: Configure Git authentication
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config --global --add url."https://x-access-token:${GH_PAT}@github.com/".insteadOf git@github.com:
+          git config --global --add url."https://x-access-token:${GH_PAT}@github.com/".insteadOf ssh://git@github.com/
+          git config --global --add url."https://x-access-token:${GH_PAT}@github.com/".insteadOf https://github.com/
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm build

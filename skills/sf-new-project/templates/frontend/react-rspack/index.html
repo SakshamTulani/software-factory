@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" data-theme="intellicar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{PRODUCT_NAME}}</title>
+    <script>
+      // Pick light or dark before first paint, so the page doesn't flash.
+      try {
+        const stored = localStorage.getItem("theme")
+        const dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches
+        document.documentElement.classList.add(dark ? "dark" : "light")
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
