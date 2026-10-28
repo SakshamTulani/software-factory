@@ -64,6 +64,16 @@ Also enforced:
 - Only `src/shared/ui/data-grid/` imports AG Grid; `ag-grid-enterprise` is never imported (it needs a licence).
 - No circular imports.
 
+## Entities hold raw values
+
+`types.ts` entities carry values in the form you compute, compare and sort with; formatting for people happens only in `ui/` (and in a grid column's formatter).
+
+- Dates and times: `Date` or epoch milliseconds. Durations: milliseconds. Quantities: numbers, in one stated unit. States: their code.
+- The mapper converts what the API sends (numeric strings, `"29/10/2026"`, `"1h 20m"`) into those. If the API's format is ambiguous, the mapper parses it explicitly and a mapper test pins the result.
+- Missing is `null`, never `"—"`, `"NA"` or `""`.
+
+Tables, charts and filters depend on this: a grid sorts and filters the raw value (`ag-grid` skill), so a date formatted in the mapper sorts as text.
+
 ## Data flow: the store tells the UI
 
 All server data the UI reads lives in the TanStack Query cache, and **only the store writes to it**. REST fills it, WebSocket deltas patch it, and mutations invalidate or patch it. Components never fetch.

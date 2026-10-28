@@ -15,16 +15,52 @@ Interactive tables (sortable, filterable, many rows, live updates, CSV export) u
 - **The theme comes from `DESIGN.md`.** `data-grid/theme.ts` maps grid parameters to the CSS variables in `src/index.css`, so light and dark follow the app. Don't set colours, fonts or row heights on a grid instance; change the tokens.
 - **Version-specific APIs.** This is AG Grid 36. Custom filters use `enableFilterHandlers` with `filter: { component, doesFilterPass }` and `useGridFilterDisplay`, and custom date inputs use the `dateComponent` column property. Older patterns you may remember (`useGridFilter` with the filter logic inside the component, `ag-theme-*` CSS classes, `@ag-grid-community/*` packages, global `ModuleRegistry` calls) are legacy here.
 
+## Sorting and filtering follow the value, not the text
+
+The grid sorts and filters the **raw value** in the row, and shows it through a formatter. If the row holds text formatted for display, sorting and filtering run on that text and are wrong: "03 Oct" sorts before "30 Sep", "1h 30m" before "9m", "10" before "9", and a date filter can't match "29 Oct 2026, 14:05".
+
+So:
+
+1. **Rows hold raw, typed values.** Dates and times are `Date`, epoch milliseconds or ISO-8601 strings; durations are milliseconds; quantities are numbers; states are their code (`"critical"`, not "Critical ⚠"). The module's mapper converts whatever the API sends into these (`frontend-architecture`). Never format in the mapper, the store or the hook.
+2. **Every column declares a `kind`**, which TypeScript requires. The kind sets the comparator, the filter and the formatter together (`data-grid/columns.ts`):
+
+| `kind` | Raw value | Sorts | Filter | Shows |
+|---|---|---|---|---|
+| `text` | string | natural (Truck 2 before Truck 10) | text | as is |
+| `number` | number | numerically | number | fixed `decimals` + `unit` |
+| `date` | Date, epoch ms or ISO string | chronologically | date, whole days | 2026-10-29 |
+| `datetime` | Date, epoch ms or ISO string | chronologically | date, whole days | 2026-10-29 14:05 |
+| `duration` | milliseconds | numerically | number, in minutes | 1h 30m |
+| `enum` | code from a fixed set | by `order` if given, else A to Z | checkbox list | as is |
+| `action` | none | not sortable | none | the cell renderer |
+
+3. **Display goes in `valueFormatter` or `cellRenderer` only.** If you override `valueFormatter` (a relative "5 min ago", a status pill), keep the kind: the sort and filter still use the raw value. If you override `valueGetter`, it must return the raw value, not text.
+4. **Missing values are `null`**, shown as "—" and sorted last in both directions. Never put "—", "NA" or "" in the row.
+5. **A value whose order means something** (severity, priority, lifecycle stage) is an `enum` with an `order`; alphabetical "critical, high, low, medium" is wrong.
+
+### Checklist for every new column
+
+- [ ] What is the raw value and its type? Does the mapper produce it, not a display string?
+- [ ] Which `kind`? Would sorting it ascending put the rows in the order a user expects?
+- [ ] Does the filter type match (date picker for dates, numbers for numbers, a checkbox list for a fixed set)?
+- [ ] Is anything formatted outside `valueFormatter` or `cellRenderer`?
+- [ ] For a computed column (`valueGetter`), does it return a raw value?
+
+If a column needs a comparator or filter none of the kinds covers, add it to `columns.ts` as a new kind with a test, rather than writing a one-off comparator in a module.
+
 ## Using DataGrid
 
 ```tsx
 import { DataGrid, type DataGridColumn } from "@/shared/ui/data-grid"
 
+// Vehicle comes from the mapper: lastSeen is epoch ms, idleMs is ms, speedKmh a number.
 const columns: DataGridColumn<Vehicle>[] = [
-  { field: "registration", headerName: "Vehicle", minWidth: 160 },
-  { field: "status", headerName: "Status", checkboxFilter: true, cellRenderer: StatusPillCell },
-  { field: "speedKmh", headerName: "Speed", numeric: true, valueFormatter: (p) => formatKmh(p.value) },
-  { field: "lastSeen", headerName: "Last seen", filter: "agDateColumnFilter" },
+  { field: "registration", headerName: "Vehicle", kind: "text", minWidth: 160 },
+  { field: "severity", headerName: "Alert", kind: "enum", order: ["critical", "high", "medium", "low"], cellRenderer: SeverityPill },
+  { field: "speedKmh", headerName: "Speed", kind: "number", decimals: 0, unit: "km/h" },
+  { field: "idleMs", headerName: "Idle", kind: "duration" },
+  { field: "lastSeen", headerName: "Last seen", kind: "datetime" },
+  { colId: "actions", headerName: "", kind: "action", cellRenderer: VehicleActions, maxWidth: 96 },
 ]
 
 export function VehiclesTable() {
@@ -49,13 +85,10 @@ export function VehiclesTable() {
 
 | Need | How |
 |---|---|
-| Numbers | `numeric: true`: right-aligned and a number filter. Format with `valueFormatter` (fixed decimals and units per `DESIGN.md`); tabular figures are global. |
-| Pick-from-values filter | `checkboxFilter: true` (the project's free replacement for Enterprise's set filter) |
-| Dates | `filter: "agDateColumnFilter"`; the date input with a calendar is wired by default |
-| Status, links, actions in a cell | a small `cellRenderer` component using shadcn and the `DESIGN.md` status pills |
+| Status, links, actions in a cell | a small `cellRenderer` component using shadcn and the `DESIGN.md` status pills; the column keeps its `kind` |
 | Search box over the table | pass its text as `quickFilterText` |
 | Count above the table | `onDisplayedRowCountChange` (reflects filters) |
-| CSV export | `ref` to the grid, then `ref.current?.api.exportDataAsCsv()` |
+| CSV export | `ref` to the grid, then `ref.current?.api.exportDataAsCsv()`; exports use the formatted values |
 | Many rows | Client-side rendering is virtualised; tens of thousands of rows are fine. Turn `pagination` on only when the list is a work queue that people page through. |
 | Row heights | `density`: `comfortable` 48, `default` 44, `dense` 36 (monitoring screens) |
 
@@ -67,7 +100,7 @@ export function VehiclesTable() {
 
 ## Testing
 
-`src/shared/ui/data-grid/DataGrid.test.tsx` shows the pattern: render `<DataGrid>` with rows and assert on visible text with Testing Library (`findByText`, since the grid renders asynchronously). Test a module's columns and renderers through the module's own component, not AG Grid internals.
+`src/shared/ui/data-grid/DataGrid.test.tsx` shows the pattern: render `<DataGrid>` with rows and assert on visible text with Testing Library (`findByText`, since the grid renders asynchronously). `columns.test.ts` shows how each kind's sort and filter are tested; a new kind gets the same kind of test. In a module, test that the mapper produces raw values (a `Date` or epoch ms, not a formatted string): that is where most sorting bugs start.
 
 ## Docs
 

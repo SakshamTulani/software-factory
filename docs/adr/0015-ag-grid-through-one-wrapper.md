@@ -15,7 +15,7 @@ Intellicar's products show most of their data in large, sortable, filterable tab
 
 - The template ships `ag-grid-community` and `ag-grid-react` 36.2.0. Only `src/shared/ui/data-grid/` imports them, enforced by dependency-cruiser.
 - That folder holds:
-  - `DataGrid`, the wrapper: typed columns with `numeric` and `checkboxFilter` shortcuts, `rowId` for live in-place updates, density, an empty-state sentence, a displayed-row count and a `gridOptions` escape hatch.
+  - `DataGrid`, the wrapper. Every column must declare a `kind` (text, number, date, datetime, duration, enum, action), which TypeScript enforces. The kind sets the comparator, filter and formatter together, so values sort and filter by what they are, not by their displayed text; rows hold raw values (dates as `Date` or epoch ms, durations in ms). It also provides `rowId` for live in-place updates, density, an empty-state sentence, a displayed-row count and a `gridOptions` escape hatch.
   - The module list. It contains Community modules only, plus development validations outside production.
   - The theme, mapped to the `DESIGN.md` CSS variables so dark mode follows the app.
   - A checkbox set filter written for the v36 filter-handler API: the free replacement for Enterprise's set filter.
@@ -30,6 +30,7 @@ Intellicar's products show most of their data in large, sortable, filterable tab
 
 - **Port the version 32 packages and wrapper as-is.** Lost because those packages are frozen at 32, use CSS theme classes and global module registration, and use the legacy custom-filter API.
 - **AllCommunityModule.** Lost because it ships every Community feature in the bundle. A short explicit list keeps size down, and development validations name any missing module.
+- **Leave the value type to each column.** Lost because a column given a display string then sorts and filters as text ("03 Oct" before "30 Sep"), and nothing catches it until a user does.
 - **TanStack Table.** Lost because the team already knows AG Grid, and it virtualises, filters and exports out of the box.
 
 ## Consequences

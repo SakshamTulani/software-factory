@@ -3,19 +3,18 @@ import { AgGridProvider, AgGridReact, type AgGridReactProps } from "ag-grid-reac
 import { type Ref, useCallback, useMemo } from "react"
 
 import { cn } from "@/shared/lib/utils"
-import { checkboxSetFilter } from "./CheckboxSetFilter"
+import { type ColumnKind, type ColumnKindOptions, columnKindDefaults } from "./columns"
 import { compareValues } from "./comparators"
 import { DateFilterInput } from "./DateFilterInput"
 import { gridModules } from "./modules"
 import { type GridDensity, gridTheme, rowHeights } from "./theme"
 
-/** A column: an AG Grid ColDef plus two shortcuts. */
-export type DataGridColumn<TData> = ColDef<TData> & {
-  /** Right-aligned, numeric filter, and the number formatting the column defines. */
-  numeric?: boolean
-  /** Filter by picking from the column's distinct values. */
-  checkboxFilter?: boolean
-}
+/**
+ * A column: an AG Grid ColDef plus a required `kind` that decides how its
+ * values sort, filter and display (see columns.ts). Rows must hold raw values
+ * (Date or epoch ms, numbers, durations in ms), never text formatted for display.
+ */
+export type DataGridColumn<TData> = ColDef<TData> & ColumnKindOptions & { kind: ColumnKind }
 
 export type DataGridProps<TData> = {
   rows: TData[] | undefined
@@ -60,9 +59,8 @@ export function DataGrid<TData>({
 }: DataGridProps<TData>) {
   const columnDefs = useMemo<ColDef<TData>[]>(
     () =>
-      columns.map(({ numeric, checkboxFilter, ...col }) => ({
-        ...(numeric ? { type: "rightAligned", filter: "agNumberColumnFilter" } : {}),
-        ...(checkboxFilter ? { filter: checkboxSetFilter } : {}),
+      columns.map(({ kind, decimals, unit, order, ...col }) => ({
+        ...columnKindDefaults<TData>(kind, { decimals, unit, order }),
         ...col,
       })),
     [columns]

@@ -1,13 +1,13 @@
 import { expect, it } from "@rstest/core"
 import { render, screen } from "@testing-library/react"
 
-import { DataGrid } from "./DataGrid"
+import { DataGrid, type DataGridColumn } from "./DataGrid"
 
 type Vehicle = { id: string; name: string; speed: number }
 
-const columns = [
-  { field: "name" as const, headerName: "Vehicle" },
-  { field: "speed" as const, headerName: "Speed", numeric: true },
+const columns: DataGridColumn<Vehicle>[] = [
+  { field: "name", headerName: "Vehicle", kind: "text" },
+  { field: "speed", headerName: "Speed", kind: "number", unit: "km/h" },
 ]
 
 it("renders a row per item", async () => {
@@ -24,6 +24,7 @@ it("renders a row per item", async () => {
 
   expect(await screen.findByText("Truck 1")).toBeInTheDocument()
   expect(screen.getByText("Truck 2")).toBeInTheDocument()
+  expect(screen.getByText("42 km/h")).toBeInTheDocument()
 })
 
 it("shows the empty-state sentence when there are no rows", async () => {
