@@ -1,6 +1,6 @@
 # Writing a skill
 
-Every distributable skill is `skills/<name>/SKILL.md`, with supporting files beside it. The `skills` CLI finds skills under `skills/` and installs each folder on its own into a project's `.agents/skills/<name>/`. Follow the anatomy of Addy's skills (`docs/skill-anatomy.md` in `addyosmani/agent-skills`).
+Every distributable skill is `skills/<group>/<name>/SKILL.md`, with supporting files beside it. Groups say who needs a skill: `core` (every project), `frontend`, `backend`, `factory` (`sf-new-project`). The `skills` CLI finds skills up to two category levels deep and installs each folder on its own, flat, into a project's `.agents/skills/<name>/`, so the group never appears in a project and links between skills stay `../<other>/`. Skill names must be unique across groups. Follow the anatomy of Addy's skills (`docs/skill-anatomy.md` in `addyosmani/agent-skills`).
 
 ## Front matter
 

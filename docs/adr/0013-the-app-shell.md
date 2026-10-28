@@ -16,7 +16,7 @@ The template had docs and configs but no app: no `package.json`, `src/`, or `pnp
 ## Decision
 
 - The template ships a shell with no modules. It has `src/app/` (providers, `queryClient.ts`, `router.tsx`, and `modules.ts`, the registry `sf-new-module` adds to) and `src/shared/` (`api/httpClient`, `config/env` validated with zod, `lib/` with `cn` and the `AppModule` type, `realtime/` wrapping `fmswsclientjs`, plus the fake connection every store test uses). `pnpm check` and `pnpm build` are green on a fresh project.
-- Versions match fms-ui where both use a package, and every version is pinned exactly. Where fms-ui's range allowed a release less than a week old, an older one was chosen: pnpm 11 rejects very fresh releases.
+- Versions match Intellicar's existing frontend stack where it uses the same package, and every version is pinned exactly. Where a newer release was less than a week old, an older one was chosen: pnpm 11 rejects very fresh releases.
 - `realtime/` routes messages by (channel, topic) and reference-counts subscriptions. It doesn't re-subscribe on reconnect, because `fmswsclientjs` already re-sends its subscriptions itself.
 - **Correction to 0003:** `queryOptions` is exported by `@tanstack/react-query`, not `@tanstack/query-core`. Stores import `QueryClient` and `queryOptions` from `@tanstack/react-query`; `queryOptions` is a typing helper and the store still never renders or calls hooks. `@tanstack/query-core` is not a direct dependency.
 - **dependency-cruiser 18.7.0, not 16.** Version 16 supports TypeScript below 6 only; with TypeScript 6 it skipped every `.ts` file and reported "0 modules cruised" as a pass. Version 18 cruises them, and each rule was re-verified to fail on a deliberate violation.

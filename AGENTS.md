@@ -5,14 +5,14 @@ Intellicar's software factory: agent skills, distributed with the `skills` CLI, 
 ## Layout
 
 ```
-skills/                           # everything a project installs; one folder per skill
-├── sf-new-project/               # installed globally; carries what it copies:
+skills/                           # everything the skills CLI distributes, grouped by who needs it
+├── factory/sf-new-project/       # installed globally; carries what it copies:
 │   ├── templates/<type>/<name>/  #   the starting repo + skills.txt (the skills it installs)
 │   ├── design-systems/<name>/    #   DESIGN.md per design system
 │   └── common/                   #   files every project gets (subagent personas)
-├── sf-setup/  sf-new-module/     # factory skills
-├── sf-spec/ sf-plan/ sf-build/ … # lifecycle entry points (user-invoked)
-└── <the rest>/                   # forked from Addy Osmani and shadcn, adapted (docs/upstream.md)
+├── core/                         # every project: lifecycle (sf-spec, sf-plan, sf-build …), sf-setup, git, docs, TDD
+├── frontend/                     # frontend projects: architecture, testing, UI, React, Rspack, Rstest, shadcn
+└── backend/                      # backend projects only: API design, observability, migrations
 docs/                             # how the factory itself is built and decided
 ```
 

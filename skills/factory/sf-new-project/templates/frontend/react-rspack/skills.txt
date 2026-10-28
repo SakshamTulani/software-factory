@@ -1,0 +1,54 @@
+# Skills a react-rspack project installs from sf-factory: every skill in skills/core/ and skills/frontend/.
+# Backend-only skills (skills/backend/) are left out. sf-new-project reads this; it is not copied into the project.
+# Regenerate after adding or removing a skill: (ls skills/core skills/frontend) and keep this list sorted.
+
+# core
+ci-cd-and-automation
+code-review-and-quality
+code-simplification
+constraint-driven-development
+context-engineering
+debugging-and-error-recovery
+documentation-and-adrs
+doubt-driven-development
+engineering-checklists
+file-pr
+git-workflow-and-versioning
+idea-refine
+incremental-implementation
+interview-me
+performance-optimization
+planning-and-task-breakdown
+project-workflow
+security-and-hardening
+sf-build
+sf-constraints
+sf-plan
+sf-review
+sf-setup
+sf-ship
+sf-simplify
+sf-spec
+sf-test
+sf-transcribe
+shipping-and-launch
+source-driven-development
+spec-driven-development
+test-driven-development
+using-agent-skills
+
+# frontend
+browser-testing-with-devtools
+composition-patterns
+frontend-architecture
+frontend-testing
+frontend-ui-engineering
+react-best-practices
+rspack-best-practices
+rspack-split-chunks
+rstest-best-practices
+rstest-debugging
+sf-new-module
+sf-webperf
+shadcn
+web-design-guidelines

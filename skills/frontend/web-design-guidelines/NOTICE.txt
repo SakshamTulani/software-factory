@@ -1,0 +1,2 @@
+web-design-guidelines SKILL.md: adapted from vercel-labs/agent-skills at 1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62 (MIT, as declared upstream; no LICENSE file there).
+guidelines.md and LICENSE.txt: vercel-labs/web-interface-guidelines at 434b7f91364665f2f733b310ec54809bf8f37937.

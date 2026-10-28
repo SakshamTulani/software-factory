@@ -1,0 +1,2 @@
+From vercel-labs/agent-skills at 1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62 (adapted, see docs/upstream.md in sf-factory).
+License: MIT, as declared by upstream in this skill's SKILL.md front matter (`license: MIT`) and in the repository README ("## License ... MIT"). The upstream repository ships no LICENSE file of its own.

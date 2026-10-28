@@ -1,6 +1,6 @@
 # Factory decision records
 
-Decisions that shape the factory and every project it generates. Numbered and never edited after acceptance: supersede instead. Format: [the template's ADR template](../../skills/sf-new-project/templates/frontend/react-rspack/docs/adr/_template.md).
+Decisions that shape the factory and every project it generates. Numbered and never edited after acceptance: supersede instead. Format: [the template's ADR template](../../skills/factory/sf-new-project/templates/frontend/react-rspack/docs/adr/_template.md).
 
 | ADR | Status | Decision |
 |---|---|---|
@@ -12,8 +12,9 @@ Decisions that shape the factory and every project it generates. Numbered and ne
 | [0006](0006-specs-with-requirement-ids-and-an-index.md) | accepted | Addy's spec format plus permanent `REQ-NNN` ids and a specs index |
 | [0007](0007-fork-addy-skills-into-every-project.md) | superseded by 0010 | Addy's skills are forked into the factory and copied into every new project |
 | [0008](0008-design-systems-as-design-md-with-a-forked-shadcn-skill.md) | accepted | Design systems are `DESIGN.md` files chosen at project creation; the shadcn skill is forked and pinned |
-| [0009](0009-fms-ui-git-flow-as-the-default.md) | accepted | fms-ui's develop + draft-main flow, without client lines, is the default git strategy |
+| [0009](0009-develop-main-git-flow-as-the-default.md) | accepted | The develop + draft-main flow is the default git strategy |
 | [0010](0010-distribute-with-the-skills-cli.md) | accepted | Everything ships as skills via the `skills` CLI; `sf-` prefix; Stop hook runs `pnpm check`; no session-start router |
 | [0011](0011-conversation-logs-chosen-per-project.md) | accepted | Conversation logs are chosen per project (`local` default, `committed`, `off`), saved by `sf-transcribe` with date-author-topic names |
 | [0012](0012-save-the-conversation-after-every-turn.md) | accepted | Automatic conversation saving runs from the `Stop` hook after every turn, not `SessionEnd` |
 | [0013](0013-the-app-shell.md) | accepted | The react-rspack shell ships with no modules; stores import from `@tanstack/react-query`; dependency-cruiser 18 for TypeScript 6 |
+| [0014](0014-skill-groups-rstest-and-the-intellicar-theme.md) | accepted | Skills grouped core/frontend/backend/factory; tests on Rstest; rstack and Vercel frontend skills forked; the Intellicar theme with AA-checked colours |

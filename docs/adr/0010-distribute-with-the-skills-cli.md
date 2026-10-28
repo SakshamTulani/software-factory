@@ -11,7 +11,7 @@ Supersedes [0007](0007-fork-addy-skills-into-every-project.md). Keeps its fork o
 
 ## Context
 
-ADR 0007 copied a project kit into each project once. That kept projects safe from upstream changes, but factory fixes never reached existing projects either. The factory itself was a private Claude Code plugin, which needed a marketplace, managed settings and per-machine installs, worked only in Claude Code, and updated for everyone at once when auto-update was on. fms-ui already uses the `skills` CLI (`vercel-labs/skills`): skills committed in `.agents/skills/`, pinned by `skills-lock.json`, updated with an explicit `skills update`.
+ADR 0007 copied a project kit into each project once. That kept projects safe from upstream changes, but factory fixes never reached existing projects either. The factory itself was a private Claude Code plugin, which needed a marketplace, managed settings and per-machine installs, worked only in Claude Code, and updated for everyone at once when auto-update was on. Intellicar teams already use the `skills` CLI (`vercel-labs/skills`): skills committed in `.agents/skills/`, pinned by `skills-lock.json`, updated with an explicit `skills update`.
 
 ## Decision
 

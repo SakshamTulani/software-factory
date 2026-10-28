@@ -1,16 +1,16 @@
 # Templates and design systems
 
-A template is a complete starting repo at `skills/sf-new-project/templates/<repo-type>/<name>/`. `/sf-new-project` asks for the repo type, the template and the design system, copies the template and `common/`, and installs the skills its `skills.txt` lists.
+A template is a complete starting repo at `skills/factory/sf-new-project/templates/<repo-type>/<name>/`. `/sf-new-project` asks for the repo type, the template and the design system, copies the template and `common/`, and installs the skills its `skills.txt` lists.
 
 | Template | Stack |
 |---|---|
-| `frontend/react-rspack` | Rspack, React 19, TanStack Query (store-owned cache), WebSocket client, Tailwind v4 + shadcn, React Router 7, Zustand, Vitest + RTL + MSW, Biome, dependency-cruiser |
+| `frontend/react-rspack` | Rspack, React 19, TanStack Query (store-owned cache), WebSocket client, Tailwind v4 + shadcn, React Router 7, Zustand, Rstest + happy-dom + RTL + MSW, Biome, dependency-cruiser |
 
 Adding a template means a row here and a row in `sf-new-project`'s template table.
 
 ## What a template contains
 
-- `skills.txt`: the skills it installs (not copied into the project).
+- `skills.txt`: the skills it installs (not copied into the project). A frontend template lists every skill in `skills/core/` and `skills/frontend/`; a backend template would list `skills/core/` and `skills/backend/`.
 - A root `AGENTS.md` (essentials and a "read when relevant" table only), plus `CLAUDE.md` holding just `@AGENTS.md`.
 - `docs/agents/issue-tracker.md` and `docs/agents/git.md`: placeholders that `/sf-setup` replaces with an adapter (tracker `github`, `local` or `hybrid`; git `develop-main` or `main`).
 - `docs/specs/` and `docs/adr/`, each with `_template` and a `README.md` index; `docs/client.md`, `docs/product.md`, `GLOSSARY.md`.
@@ -18,7 +18,7 @@ Adding a template means a row here and a row in `sf-new-project`'s template tabl
 - `.github/workflows/pr-guard.yml` and `.github/pull_request_template.md`.
 - `.claude/settings.json` and `.claude/hooks/check-on-stop.sh`: the Stop hook that refuses to end a turn while `pnpm check` is red.
 - `.dependency-cruiser.cjs`, and a `check` script that is the Definition of Done.
-- The app shell (react-rspack): `package.json` with exact versions, `pnpm-lock.yaml`, the Rspack, TypeScript, Biome and Vitest configs, `src/app/` (providers, router, `modules.ts` registry) and `src/shared/` (HTTP client, env, `cn`, the realtime connection and its fake). No modules: a project's first module comes from its first spec.
+- The app shell (react-rspack): `package.json` with exact versions, `pnpm-lock.yaml`, the Rspack, Rstest, TypeScript and Biome configs, `src/app/` (providers, router, `modules.ts` registry) and `src/shared/` (HTTP client, env, `cn`, the realtime connection and its fake). No modules: a project's first module comes from its first spec.
 
 Placeholders `sf-new-project` fills: `{{PROJECT_NAME}}`, `{{CLIENT_NAME}}`, `{{PRODUCT_NAME}}`, `{{ONE_SENTENCE_DESCRIPTION}}`.
 
@@ -41,4 +41,4 @@ So put rules that will change into a skill. Keep template files to what tools ne
 
 ## Design systems
 
-`skills/sf-new-project/design-systems/<name>/DESIGN.md`, indexed in that folder's `README.md`.
+`skills/factory/sf-new-project/design-systems/<name>/DESIGN.md`, indexed in that folder's `README.md`. A design system's colour pairs must pass WCAG AA in both themes; check them with a script before merging, not by eye.

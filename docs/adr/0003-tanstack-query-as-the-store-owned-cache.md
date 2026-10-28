@@ -9,7 +9,7 @@ superseded-by:
 
 ## Context
 
-Projects rely heavily on WebSockets. Each module has a store that owns its data. When a WebSocket update arrives, the UI must re-render without the component refetching. fms-ui solved this with an in-house `@fms/query`, about 800 lines: a store-owned cache with `useQuery` over `useSyncExternalStore`. It works, but it applies the pattern inconsistently: `command-center-store.ts` exposes three different ways to read its data.
+Projects rely heavily on WebSockets. Each module has a store that owns its data. When a WebSocket update arrives, the UI must re-render without the component refetching. Intellicar's earlier frontend solved this with an in-house query library, about 800 lines: a store-owned cache with `useQuery` over `useSyncExternalStore`. It works, but it applies the pattern inconsistently: `command-center-store.ts` exposes three different ways to read its data.
 
 ## Decision
 
@@ -17,9 +17,9 @@ The store is the only writer to a TanStack Query cache. The store gets the `Quer
 
 ## Alternatives considered
 
-- **Keep `@fms/query`.** Lost because it has no `select`, so every subscriber re-renders on every batch. It also has no devtools, retries or optimistic rollback; streams with no REST source use a placeholder observer whose fetcher never resolves; and we would maintain it ourselves.
+- **Keep the in-house query library.** Lost because it has no `select`, so every subscriber re-renders on every batch. It also has no devtools, retries or optimistic rollback; streams with no REST source use a placeholder observer whose fetcher never resolves; and we would maintain it ourselves.
 - **Zustand for server data.** Lost because we would rebuild loading and error state, dedupe and invalidation by hand.
 
 ## Consequences
 
-Stores depend on `@tanstack/query-core` and receive the `QueryClient`, so store tests use a real `QueryClient` with a fake socket. Large, fast-changing maps need `structuralSharing: false`. fms-ui is not migrated by this decision.
+Stores depend on `@tanstack/query-core` and receive the `QueryClient`, so store tests use a real `QueryClient` with a fake socket. Large, fast-changing maps need `structuralSharing: false`. Existing apps are not migrated by this decision.
