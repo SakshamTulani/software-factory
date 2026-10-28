@@ -1,0 +1,50 @@
+# After every push to main, make sure a "main -> develop" back-merge PR exists.
+# Ported from intellicars/fms-ui. Uses the Intellicars Manageer GitHub App token: PRs opened with GITHUB_TOKEN
+# do not trigger the required checks. The app token does, and the PR shows as
+# authored by intellicars-manageer[bot] so it is clearly automated.
+# If it conflicts, resolve on a merge/main-to-develop branch, not on main.
+name: Back-merge main into develop
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Get bot token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.INTELLICARS_BOT_APP_ID }}
+          private-key: ${{ secrets.INTELLICARS_BOT_PRIVATE_KEY }}
+
+      - name: Open back-merge PR if develop is behind
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          if ! git rev-parse -q --verify origin/develop >/dev/null; then
+            echo "No develop branch yet"
+            exit 0
+          fi
+          if git merge-base --is-ancestor origin/main origin/develop; then
+            echo "develop already contains main"
+            exit 0
+          fi
+          open=$(gh pr list --base develop --head main --state open --json number --jq length)
+          if [ "$open" = 0 ]; then
+            gh pr create --base develop --head main \
+              --title "chore(release): back-merge main into develop" \
+              --label "main to develop sync" \
+              --body "Opened automatically by the Intellicars Manageer bot after a push to main. Review before merging. Merge with a merge commit, never squash or rebase."
+          fi
