@@ -4,7 +4,7 @@ A template is a complete starting repo at `skills/factory/sf-new-project/templat
 
 | Template | Stack |
 |---|---|
-| `frontend/react-rspack` | Rspack, React 19, TanStack Query (store-owned cache), WebSocket client, Tailwind v4 + shadcn, React Router 7, Zustand, Rstest + happy-dom + RTL + MSW, Biome, dependency-cruiser |
+| `frontend/react-rspack` | Rspack, React 19, TanStack Query (store-owned cache), WebSocket client, Tailwind v4 + shadcn, AG Grid Community 36, React Router 7, Zustand, Rstest + happy-dom + RTL + MSW, Biome, dependency-cruiser |
 
 Adding a template means a row here and a row in `sf-new-project`'s template table.
 
@@ -18,7 +18,7 @@ Adding a template means a row here and a row in `sf-new-project`'s template tabl
 - `.github/workflows/pr-guard.yml` and `.github/pull_request_template.md`.
 - `.claude/settings.json` and `.claude/hooks/check-on-stop.sh`: the Stop hook that refuses to end a turn while `pnpm check` is red.
 - `.dependency-cruiser.cjs`, and a `check` script that is the Definition of Done.
-- The app shell (react-rspack): `package.json` with exact versions, `pnpm-lock.yaml`, the Rspack, Rstest, TypeScript and Biome configs, `src/app/` (providers, router, `modules.ts` registry) and `src/shared/` (HTTP client, env, `cn`, the realtime connection and its fake). No modules: a project's first module comes from its first spec.
+- The app shell (react-rspack): `package.json` with exact versions, `pnpm-lock.yaml`, the Rspack, Rstest, TypeScript and Biome configs, `src/app/` (providers, router, `modules.ts` registry) and `src/shared/` (HTTP client, env, `cn`, the realtime connection and its fake, shadcn components, and `ui/data-grid/`, the AG Grid wrapper). No modules: a project's first module comes from its first spec.
 
 Placeholders `sf-new-project` fills: `{{PROJECT_NAME}}`, `{{CLIENT_NAME}}`, `{{PRODUCT_NAME}}`, `{{ONE_SENTENCE_DESCRIPTION}}`.
 

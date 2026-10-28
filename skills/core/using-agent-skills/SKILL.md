@@ -24,6 +24,7 @@ Task arrives
     ├── Implementing code? ────────────→ incremental-implementation
     │   ├── UI work? ─────────────────→ frontend-ui-engineering (reads DESIGN.md)
     │   │   ├── Components / shadcn? ─→ shadcn
+    │   │   ├── Tables / data grids? ──→ ag-grid
     │   │   ├── Component API design? ─→ composition-patterns
     │   │   ├── React performance? ───→ react-best-practices
     │   │   └── UI review / a11y? ────→ web-design-guidelines

@@ -35,7 +35,7 @@ Lead with the recommended answer where there is one, so the user can accept it i
 
    | Template | Stack |
    |---|---|
-   | `frontend/react-rspack` | Rspack, React 19, TanStack Query (store-owned cache), WebSocket client, Tailwind v4 + shadcn, React Router 7, Zustand, Rstest + happy-dom + RTL + MSW, Biome, dependency-cruiser |
+   | `frontend/react-rspack` | Rspack, React 19, TanStack Query (store-owned cache), WebSocket client, Tailwind v4 + shadcn, AG Grid Community 36, React Router 7, Zustand, Rstest + happy-dom + RTL + MSW, Biome, dependency-cruiser |
 5. **Design system** (frontend only): list `design-systems/README.md`'s table. Recommend `intellicar-default`.
 6. **Project name**: kebab-case. Recommend `<client>-<product>`.
 7. **Git remote**: where the repo will live.

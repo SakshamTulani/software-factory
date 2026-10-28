@@ -38,6 +38,7 @@ test-driven-development
 using-agent-skills
 
 # frontend
+ag-grid
 browser-testing-with-devtools
 composition-patterns
 frontend-architecture

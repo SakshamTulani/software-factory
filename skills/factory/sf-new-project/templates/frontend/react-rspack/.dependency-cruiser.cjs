@@ -128,6 +128,22 @@ module.exports = {
       to: { path: "node_modules/fmswsclientjs/" },
     },
     {
+      name: "ag-grid-only-in-data-grid",
+      severity: "error",
+      comment:
+        "Render tables through DataGrid (@/shared/ui/data-grid) so every grid shares the theme, modules and defaults.",
+      from: { path: "^src/", pathNot: ["^src/shared/ui/data-grid/", TEST] },
+      to: { path: "node_modules/(ag-grid-community|ag-grid-react)/" },
+    },
+    {
+      name: "no-ag-grid-enterprise",
+      severity: "error",
+      comment:
+        "AG Grid Enterprise needs a commercial licence the project doesn't have. Use Community features only.",
+      from: {},
+      to: { path: "ag-grid-enterprise" },
+    },
+    {
       name: "cross-module-via-index",
       severity: "error",
       comment: "Import another module only through its index.ts.",
@@ -169,7 +185,7 @@ module.exports = {
   ],
   options: {
     doNotFollow: { path: "node_modules" },
-    exclude: { path: "(^|/)(dist|coverage)/" },
+    exclude: { path: "^(dist|coverage)/" },
     tsPreCompilationDeps: true,
     tsConfig: { fileName: "tsconfig.json" },
     enhancedResolveOptions: {

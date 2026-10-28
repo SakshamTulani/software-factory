@@ -56,6 +56,10 @@ Not taken: `react-view-transitions` (motion beyond what `DESIGN.md` allows), `re
 
 Neither skill is installed: both are built to choose a style for marketing sites, need Python or Chrome, and would compete with a fixed `DESIGN.md`.
 
+## AG Grid
+
+`skills/frontend/ag-grid` is our own skill; nothing is forked. The template's `src/shared/ui/data-grid/` is written against AG Grid Community 36.2.0 (MIT) and its docs at https://www.ag-grid.com/react-data-grid/ (Markdown via `.md`).
+
 ## shadcn-ui/ui
 
 `skills/frontend/shadcn` from `skills/shadcn` at `96da9cc7f1aa10580a3741664e2a77c721206c00` (2026-10-27), MIT. Without `evals/` and `agents/`; `skills/migrate-radix-to-base` not taken.

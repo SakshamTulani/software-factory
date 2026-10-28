@@ -61,6 +61,7 @@ Also enforced:
 - Only `store/` and `hooks/` import TanStack Query. Only `realtime/` imports the WS client.
 - `model.ts` and `types.ts` import no React, TanStack Query or WS client.
 - `shared/` imports no module.
+- Only `src/shared/ui/data-grid/` imports AG Grid; `ag-grid-enterprise` is never imported (it needs a licence).
 - No circular imports.
 
 ## Data flow: the store tells the UI
@@ -115,6 +116,7 @@ One hook per file. A module's `index.ts` exports only what other modules or `app
 |---|---|
 | Writing components or hooks, or fixing slow renders | `react-best-practices` (re-renders, waterfalls, bundle size) |
 | Designing a component's API (variants, compound components, avoiding boolean props) | `composition-patterns` |
+| Showing tabular data (sorting, filtering, many rows, live rows, export) | `ag-grid`: always through `DataGrid` from `@/shared/ui/data-grid` |
 | Building or styling UI | `DESIGN.md`, `frontend-ui-engineering`, `shadcn`; review with `web-design-guidelines` |
 | Changing `rspack.config.ts`, or a build is slow or too big | `rspack-best-practices`, `rspack-split-chunks` |
 | Writing or debugging tests | `frontend-testing`, `rstest-best-practices`, `rstest-debugging` |

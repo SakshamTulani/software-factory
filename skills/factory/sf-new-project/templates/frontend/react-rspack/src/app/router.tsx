@@ -1,14 +1,15 @@
 import { createBrowserRouter, Link, Outlet } from "react-router-dom"
 
-import { env } from "@/shared/config/env"
 import { modules } from "./modules"
+
+const PRODUCT_NAME = "{{PRODUCT_NAME}}"
 
 function Layout() {
   return (
     <div className="flex min-h-svh flex-col bg-background text-foreground">
       <header className="flex h-14 items-center gap-6 border-b px-6">
         <Link to="/" className="font-semibold">
-          {env.PUBLIC_APP_NAME}
+          {PRODUCT_NAME}
         </Link>
         <nav className="flex gap-4 text-muted-foreground text-sm">
           {modules.map((m) => (

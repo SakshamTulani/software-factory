@@ -9,11 +9,12 @@ The factory follows the lifecycle it ships ([`project-workflow`](../../skills/co
 
 1. Every `skills/*/SKILL.md` has front matter that parses, and `name` equals its folder.
 2. Every skill a template lists in `skills.txt` exists.
-3. Install from the working copy into a throwaway project and check the result:
+3. `npx -y skills@1.7.4 add /path/to/sf-factory -l` prints no `Skipped` line and finds as many skills as there are `skills/*/*/SKILL.md` files. The CLI skips a skill whose front matter doesn't parse, prints a warning, and still exits 0.
+4. Install from the working copy into a throwaway project and check the result:
 
 ```bash
 cd "$(mktemp -d)" && git init -q
-DISABLE_TELEMETRY=1 npx -y skills@1.7.4 add /path/to/sf-factory -a claude-code codex -y -s $(grep -v '^#' /path/to/sf-factory/skills/factory/sf-new-project/templates/frontend/react-rspack/skills.txt)
+DISABLE_TELEMETRY=1 npx -y skills@1.7.4 add /path/to/sf-factory -a claude-code codex -y -s $(grep -v '^#' /path/to/sf-factory/skills/factory/sf-new-project/templates/frontend/react-rspack/skills.txt | grep -v '^$')
 ls .agents/skills && cat skills-lock.json
 ```
 
