@@ -9,7 +9,7 @@ Writes the per-project choices that other skills read:
 
 - `docs/agents/issue-tracker.md`: where specs' tasks, bugs and ideas live
 - `docs/agents/git.md`: branches, where PRs go, how releases happen
-- the conversation log: whether sessions are saved, whether they're in git, and whether saving is automatic
+- the conversation log: whether sessions are saved, whether they're in git, and whether they're saved automatically after every turn
 - the `tracker`, `git` and `conversations` fields of `factory.json`
 
 This is a prompt-driven skill, not a script. Explore, present what you found, ask, confirm a draft, then write.
@@ -64,7 +64,7 @@ For `committed`, say plainly: a transcript holds everything said in the session,
 
 If it isn't `off`, ask one follow-up:
 
-> Save automatically when each session ends? (recommended: **yes**) Otherwise only when someone runs `/sf-transcribe`.
+> Save automatically after every turn, so the log is always current? (recommended: **yes**) Otherwise only when someone runs `/sf-transcribe`.
 
 ## 3. Confirm
 
@@ -81,15 +81,13 @@ Show a draft of both files, with the adapter's `{{…}}` placeholders filled in,
 - Create the labels the repo lacks (`gh label create`): the tracker adapter's labels, plus `main to develop sync` for `develop-main`.
 - Conversation log: set `"conversations": {"mode": "local|committed|off", "auto": true|false, "dir": "docs/conversations"}` in `factory.json`.
   - `local`: add `docs/conversations/` to `.gitignore`. `committed`: remove that line if a previous run added it.
-  - `auto: true`: add this to the `hooks` of `.claude/settings.json`, keeping the existing `Stop` hook. `auto: false` or `off`: remove it if present.
+  - `auto: true`: add this entry to the `Stop` array in `.claude/settings.json`, next to the existing `check-on-stop.sh` entry (both run after every turn). `auto: false` or `off`: remove it if present.
 
     ```json
-    "SessionEnd": [
-      { "hooks": [ { "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.agents/skills/sf-transcribe/transcribe.py --from-hook", "timeout": 30 } ] }
-    ]
+    { "hooks": [ { "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.agents/skills/sf-transcribe/transcribe.py --from-hook", "timeout": 30 } ] }
     ```
 
-    The script reads `factory.json` too, so turning `auto` off there also stops it.
+    The script reads `factory.json` too, so turning `auto` off there also stops it. It never fails a turn: a save that can't happen is skipped silently.
 
 ## 5. Done
 

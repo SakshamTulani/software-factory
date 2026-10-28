@@ -19,6 +19,6 @@ python3 .agents/skills/sf-transcribe/transcribe.py $ARGUMENTS
 - **The index:** `README.md` in the same folder, regenerated every run.
 - **What it renders:** user messages and replies as sections, slash commands by name, loaded skills and tool calls as one-line notes (`--no-tools` drops tool notes). System reminders, tool output, thinking and subagent chatter are left out.
 
-If `factory.json` has `"auto": true`, a `SessionEnd` hook already runs this at the end of every session (`--from-hook`); running it by hand mid-session is still fine.
+If `factory.json` has `"auto": true`, a `Stop` hook already runs this after every turn (`--from-hook`), so the transcript is always current and you rarely need to run it yourself. Run it by hand to set a `--topic`; the name you set is kept from then on.
 
 Report the printed path. A transcript holds everything said in the session, so when the log is committed, remind the user to check it for secrets or client-confidential detail before pushing.

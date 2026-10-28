@@ -2,6 +2,7 @@
 """Render a Claude Code session transcript (JSONL) as Markdown.
 
 Usage: transcribe.py [--topic TEXT] [--session-id ID] [--transcript PATH] [--out-dir DIR] [--no-tools] [--from-hook]
+(--from-hook: called by the Stop hook after every turn, so the log stays current.)
 Prints the path of the written Markdown file.
 
 Files are named YYYY-MM-DD-<author>-<topic>-<id6>.md so they sort by date and say
@@ -179,7 +180,7 @@ def main():
     parser.add_argument("--topic", help="what the session was about; overrides branch and title")
     parser.add_argument("--out-dir")
     parser.add_argument("--no-tools", action="store_true")
-    parser.add_argument("--from-hook", action="store_true", help="run from a SessionEnd hook: read stdin, stay quiet")
+    parser.add_argument("--from-hook", action="store_true", help="run from the Stop hook after each turn: read the hook payload, stay quiet, never fail")
     args = parser.parse_args()
 
     root = project_root()
@@ -208,16 +209,24 @@ def main():
     stamps = [r["timestamp"] for r in records if r.get("timestamp")]
     started = stamps[0][:10] if stamps else datetime.now().strftime("%Y-%m-%d")
     author = git("config", "user.name", cwd=root) or os.environ.get("USER", "unknown")
-    topic = pick_topic(args.topic, records, session_id, root)
 
     os.makedirs(out_dir, exist_ok=True)
     short_id = session_id[:6]
-    # Keep one file per session: reuse its existing name even if the topic changed since.
-    existing = glob.glob(os.path.join(out_dir, f"*-{short_id}.md"))
-    out_path = existing[0] if existing else os.path.join(
-        out_dir, f"{started}-{slugify(author)[:20]}-{slugify(topic)[:40].strip('-')}-{short_id}.md")
+    # One file per session, found by its id. Its topic sticks: later saves reuse it,
+    # and only an explicit --topic changes it (renaming the file once).
+    existing = (glob.glob(os.path.join(out_dir, f"*-{short_id}.md")) or [None])[0]
+    kept = None
+    if existing and not args.topic:
+        heading = re.search(r"^# (.+)$", open(existing, encoding="utf-8").read(400), re.M)
+        kept = heading.group(1) if heading else None
+    topic = kept or pick_topic(args.topic, records, session_id, root)
+    out_path = os.path.join(out_dir, f"{started}-{slugify(author)[:20]}-{slugify(topic)[:40].strip('-')}-{short_id}.md")
+    if existing and not args.topic:
+        out_path = existing
+    elif existing and existing != out_path:
+        os.rename(existing, out_path)
     header = (
-        f"# {topic if topic != name else name}\n\n"
+        f"# {topic}\n\n"
         f"- **Author:** {author}\n"
         f"- **Session:** `{session_id}`" + (f" ({name})" if name not in (session_id, topic) else "") + "\n"
         f"- **Started:** {started}\n"
@@ -232,4 +241,11 @@ def main():
 
 
 if __name__ == "__main__":
+    if "--from-hook" in sys.argv:
+        # Runs after every turn: a failed save must never surface as a hook error or block the session.
+        try:
+            main()
+        except BaseException as e:  # noqa: BLE001 - includes the SystemExit find_transcript raises
+            print(f"sf-transcribe: not saved ({e})", file=sys.stderr)
+        sys.exit(0)
     main()

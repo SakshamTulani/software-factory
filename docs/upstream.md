@@ -46,7 +46,7 @@ Most of `skills/` is forked from other repos and adapted. Projects install it fr
 
 ## Saksham's `transcribe-conversation`
 
-`skills/sf-transcribe` is the user-level `transcribe-conversation` skill, renamed. Changes: files named `YYYY-MM-DD-<author>-<topic>-<id6>.md` (topic from `--topic`, the branch, the title, then the first message) instead of `<title>-<id8>.md`; one file per session kept by id; output folder and on/off from `factory.json`; a `--from-hook` mode for the `SessionEnd` hook; a regenerated `README.md` index; the transcript's absolute source path dropped from the header.
+`skills/sf-transcribe` is the user-level `transcribe-conversation` skill, renamed. Changes: files named `YYYY-MM-DD-<author>-<topic>-<id6>.md` (topic from `--topic`, the branch, the title, then the first message) instead of `<title>-<id8>.md`; one file per session kept by id; output folder and on/off from `factory.json`; a `--from-hook` mode for the `Stop` hook that never fails a turn; an explicit topic that sticks; a regenerated `README.md` index; the transcript's absolute source path dropped from the header.
 
 ## Pulling a later upstream version
 
