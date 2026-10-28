@@ -62,6 +62,7 @@ Also enforced:
 - `model.ts` and `types.ts` import no React, TanStack Query or WS client.
 - `shared/` imports no module.
 - Only `src/shared/ui/data-grid/` imports AG Grid; `ag-grid-enterprise` is never imported (it needs a licence).
+- Only `src/shared/lib/format.ts` imports `date-fns`, and only it may call `toLocale*String` or `Intl` formatters (the Biome rule in `biome-plugins/no-raw-formatting.grit`; shadcn's generated primitives in `src/shared/ui/*.tsx` are exempt).
 - No circular imports.
 
 ## Entities hold raw values
@@ -73,6 +74,10 @@ Also enforced:
 - Missing is `null`, never `"—"`, `"NA"` or `""`.
 
 Tables, charts and filters depend on this: a grid sorts and filters the raw value (`ag-grid` skill), so a date formatted in the mapper sorts as text.
+
+## Formatting for display
+
+Turning a raw value into text happens only through `@/shared/lib/format` (`formatDate`, `formatDateTime`, `formatTime`, `formatRelative`, `formatDuration`, `formatNumber`, `formatPercent`), as `DESIGN.md` "Formats" specifies. Call them in `ui/` and in grid formatters. Never call `date-fns`, `toLocaleDateString`, `toLocaleString` or `Intl` formatters elsewhere. To change how a value looks across the product, change `format.ts`. A value it doesn't cover gets a new function there, with a test.
 
 ## Data flow: the store tells the UI
 

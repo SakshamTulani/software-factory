@@ -1,0 +1,16 @@
+language js
+
+// Display formatting lives in src/shared/lib/format.ts only (see DESIGN.md "Formats").
+or {
+  `$value.toLocaleDateString($args)`,
+  `$value.toLocaleTimeString($args)`,
+  `$value.toLocaleString($args)`,
+  `new Intl.DateTimeFormat($args)`,
+  `new Intl.NumberFormat($args)`,
+  `new Intl.RelativeTimeFormat($args)`
+} as $call where {
+  // format.ts is the one place allowed; shadcn primitives (src/shared/ui/*.tsx) are generated and left as shadcn ships them.
+  not $filename <: r".*src/shared/lib/format\.ts$",
+  not $filename <: r".*src/shared/ui/[^/]+\.tsx$",
+  register_diagnostic(span=$call, message="Format dates, times, durations and numbers with @/shared/lib/format, so every screen shows them the same way.")
+}

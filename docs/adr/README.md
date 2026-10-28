@@ -19,3 +19,4 @@ Decisions that shape the factory and every project it generates. Numbered and ne
 | [0013](0013-the-app-shell.md) | accepted | The react-rspack shell ships with no modules; stores import from `@tanstack/react-query`; dependency-cruiser 18 for TypeScript 6 |
 | [0014](0014-skill-groups-rstest-and-the-intellicar-theme.md) | accepted | Skills grouped core/frontend/backend/factory; tests on Rstest; rstack and Vercel frontend skills forked; the Intellicar theme with AA-checked colours |
 | [0015](0015-ag-grid-through-one-wrapper.md) | accepted | AG Grid Community 36 only through `DataGrid` in `src/shared/ui/data-grid`; Enterprise banned; depcruise no longer hides packages that ship from `dist/` |
+| [0016](0016-one-format-module-for-displayed-values.md) | accepted | Dates, times, durations and numbers are formatted only in `src/shared/lib/format.ts`, enforced by dependency-cruiser and a Biome rule |

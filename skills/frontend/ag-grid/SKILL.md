@@ -34,7 +34,7 @@ So:
 | `enum` | code from a fixed set | by `order` if given, else A to Z | checkbox list | as is |
 | `action` | none | not sortable | none | the cell renderer |
 
-3. **Display goes in `valueFormatter` or `cellRenderer` only.** If you override `valueFormatter` (a relative "5 min ago", a status pill), keep the kind: the sort and filter still use the raw value. If you override `valueGetter`, it must return the raw value, not text.
+3. **Display goes in `valueFormatter` or `cellRenderer` only, through `@/shared/lib/format`.** Each kind already formats with it. If you override `valueFormatter` (for example `formatRelative` for a "last seen" column), keep the kind: the sort and filter still use the raw value. If you override `valueGetter`, it must return the raw value, not text.
 4. **Missing values are `null`**, shown as "—" and sorted last in both directions. Never put "—", "NA" or "" in the row.
 5. **A value whose order means something** (severity, priority, lifecycle stage) is an `enum` with an `order`; alphabetical "critical, high, low, medium" is wrong.
 

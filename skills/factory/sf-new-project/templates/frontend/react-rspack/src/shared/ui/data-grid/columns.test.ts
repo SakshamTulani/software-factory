@@ -1,6 +1,8 @@
 import { describe, expect, it } from "@rstest/core"
 
-import { columnKindDefaults, formatDuration, orderedComparator, toTime } from "./columns"
+import { formatDuration, toTime } from "@/shared/lib/format"
+
+import { columnKindDefaults, orderedComparator } from "./columns"
 
 type Compare = (a: unknown, b: unknown, na?: unknown, nb?: unknown, desc?: boolean) => number
 const comparatorOf = (kind: Parameters<typeof columnKindDefaults>[0], opts = {}) =>

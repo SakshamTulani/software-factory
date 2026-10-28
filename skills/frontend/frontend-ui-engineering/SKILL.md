@@ -25,6 +25,7 @@ These override the generic guidance below wherever they differ.
 - **Components:** use the `shadcn` skill to find, add and compose components. Shared components live in `src/shared/ui/`. For component APIs use `composition-patterns`; for render cost `react-best-practices`.
 - **Done means reviewed:** finish with `DESIGN.md`'s pre-delivery checklist and a `web-design-guidelines` review of the changed files.
 - **Structure:** a module's components go in `src/modules/<module>/ui/` and get data only from that module's `hooks/` (the `frontend-architecture` skill). Ignore the generic file structure below where it differs.
+- **Values:** show dates, times, durations and numbers only through `@/shared/lib/format` (`DESIGN.md` "Formats").
 - **Responsive:** follow the Responsive section of `DESIGN.md`.
 
 ## Component Architecture

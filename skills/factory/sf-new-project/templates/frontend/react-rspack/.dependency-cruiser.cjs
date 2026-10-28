@@ -128,6 +128,14 @@ module.exports = {
       to: { path: "node_modules/fmswsclientjs/" },
     },
     {
+      name: "date-fns-only-in-format",
+      severity: "error",
+      comment:
+        "Format and parse dates for display with @/shared/lib/format, so every screen shows them the same way.",
+      from: { path: "^src/", pathNot: ["^src/shared/lib/format\\.ts$", TEST] },
+      to: { path: "node_modules/date-fns/" },
+    },
+    {
       name: "ag-grid-only-in-data-grid",
       severity: "error",
       comment:

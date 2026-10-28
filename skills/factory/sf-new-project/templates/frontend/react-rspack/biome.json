@@ -1,6 +1,10 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "files": {
     "includes": ["**", "!**/pnpm-lock.yaml", "!**/.claude", "!**/.agents", "!docs/conversations"]
   },
@@ -15,20 +19,42 @@
     "enabled": true,
     "rules": {
       "preset": "recommended",
-      "correctness": { "noUnusedImports": "error" },
-      "suspicious": { "noExplicitAny": "error" },
+      "correctness": {
+        "noUnusedImports": "error"
+      },
+      "suspicious": {
+        "noExplicitAny": "error"
+      },
       "nursery": {
         "useSortedClasses": {
           "level": "error",
           "fix": "safe",
-          "options": { "functions": ["clsx", "cn", "cva"] }
+          "options": {
+            "functions": ["clsx", "cn", "cva"]
+          }
         }
       }
     }
   },
   "javascript": {
-    "formatter": { "quoteStyle": "double", "semicolons": "asNeeded", "trailingCommas": "es5" }
+    "formatter": {
+      "quoteStyle": "double",
+      "semicolons": "asNeeded",
+      "trailingCommas": "es5"
+    }
   },
-  "css": { "parser": { "cssModules": true, "tailwindDirectives": true } },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } }
+  "css": {
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "plugins": ["./biome-plugins/no-raw-formatting.grit"]
 }

@@ -266,6 +266,28 @@ Use only the named layers in the front matter. Overlays built from shadcn (Dialo
 | Toast | Bottom right, 4–6 seconds, `aria-live="polite"`; an undo action for reversible bulk actions; errors that need action stay until dismissed. |
 | Tooltip | 12px caption, 6px radius, `popover` surface; never the only place information lives. |
 
+## Formats
+
+Every value is shown through one function in `src/shared/lib/format.ts`, so the whole product shows it the same way and a change happens in one place. Components, grid columns, chart labels and exports never format values themselves; a Biome rule and a dependency-cruiser rule enforce it.
+
+| Value | Function | Shows |
+|---|---|---|
+| Date | `formatDate` | 2026-10-29 |
+| Date and time | `formatDateTime` | 2026-10-29 14:05 |
+| Time of day | `formatTime` | 14:05 |
+| Recency (last seen, updated) | `formatRelative` | just now · 5 min ago · 3 h ago · Yesterday · then the date |
+| Duration (milliseconds) | `formatDuration` | 45s · 9m · 1h 30m · 2d 4h |
+| Quantity | `formatNumber(v, { decimals, unit })` | 1,250 · 42.5 km/h |
+| Percentage | `formatPercent(v, decimals)` | 12.5% |
+| Missing | any of the above, given `null` | — |
+| Date input text | `formatDateInput` / `parseDateInput` | 2026-10-29 |
+
+- Dates are ISO (year-month-day) wherever rows are compared; `formatRelative` is for recency only.
+- Times are 24-hour, in the viewer's time zone.
+- Fixed decimals per metric: money 2, percentages 1, counts 0, speeds 0.
+- A real zero is printed ("0", "0 km"); only a missing value is a dash.
+- A new kind of value (currency, distance with auto units) gets a new function in `format.ts` with a test, never a one-off in a component.
+
 ## Data visualisation
 
 - One question per chart; at most 4 hues on a screen; `chart-1` first. Colour never the only signal: add a label, a pattern or a position.
