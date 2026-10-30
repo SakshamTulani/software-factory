@@ -98,16 +98,16 @@ importers:
         version: 2.0.2(@rspack/core@2.2.9(@swc/helpers@0.5.23))(react-refresh@0.18.0)
       '@rstest/adapter-rspack':
         specifier: 0.12.4
-        version: 0.12.4(@rspack/cli@2.2.9(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@swc/helpers@0.5.23))))(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rstest/core@0.12.4(happy-dom@20.14.6)(jsdom@30.1.3))
+        version: 0.12.4(@rspack/cli@2.2.9(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@swc/helpers@0.5.23))))(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rstest/core@0.12.4(happy-dom@21.0.4)(jsdom@30.1.3))
       '@rstest/core':
         specifier: 0.12.4
-        version: 0.12.4(happy-dom@20.14.6)(jsdom@30.1.3)
+        version: 0.12.4(happy-dom@21.0.4)(jsdom@30.1.3)
       '@tailwindcss/postcss':
         specifier: 4.3.3
         version: 4.3.3
       '@testing-library/jest-dom':
         specifier: 7.0.1
-        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5(@types/node@25.9.9)(happy-dom@20.14.6)(jsdom@30.1.3)(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))
+        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5(@types/node@25.9.9)(happy-dom@21.0.4)(jsdom@30.1.3)(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))
       '@testing-library/react':
         specifier: 16.3.3
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -127,8 +127,8 @@ importers:
         specifier: 18.7.0
         version: 18.7.0
       happy-dom:
-        specifier: 20.14.6
-        version: 20.14.6
+        specifier: 21.0.4
+        version: 21.0.4
       husky:
         specifier: 9.1.7
         version: 9.1.7
@@ -2286,8 +2286,8 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  happy-dom@20.14.6:
-    resolution: {integrity: sha512-5DDsf4QmEIlRL6NkCv/fxSjYHHkZceL/IaYQdJc2h3G7DRTEai++VTjbfL0LB9geW2VrA3+vrjF3Efx+OTtX0Q==}
+  happy-dom@21.0.4:
+    resolution: {integrity: sha512-tFm+GaLBgo6o0awHnvHaNoraVo27qJ+2tZEtZ+cIa08hXbeitrxAJajLI05hsUy/2/YTKcUjQYzHe5mCcraLBw==}
     engines: {node: '>=20.0.0'}
 
   has-flag@4.0.0:
@@ -4910,19 +4910,19 @@ snapshots:
     optionalDependencies:
       '@rspack/core': 2.2.9(@swc/helpers@0.5.23)
 
-  '@rstest/adapter-rspack@0.12.4(@rspack/cli@2.2.9(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@swc/helpers@0.5.23))))(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rstest/core@0.12.4(happy-dom@20.14.6)(jsdom@30.1.3))':
+  '@rstest/adapter-rspack@0.12.4(@rspack/cli@2.2.9(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@swc/helpers@0.5.23))))(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rstest/core@0.12.4(happy-dom@21.0.4)(jsdom@30.1.3))':
     dependencies:
       '@rspack/cli': 2.2.9(@rspack/core@2.2.9(@swc/helpers@0.5.23))(@rspack/dev-server@2.2.2(@rspack/core@2.2.9(@swc/helpers@0.5.23)))
       '@rspack/core': 2.2.9(@swc/helpers@0.5.23)
-      '@rstest/core': 0.12.4(happy-dom@20.14.6)(jsdom@30.1.3)
+      '@rstest/core': 0.12.4(happy-dom@21.0.4)(jsdom@30.1.3)
 
-  '@rstest/core@0.12.4(happy-dom@20.14.6)(jsdom@30.1.3)':
+  '@rstest/core@0.12.4(happy-dom@21.0.4)(jsdom@30.1.3)':
     dependencies:
       '@rsbuild/core': 2.2.14
       '@types/chai': 5.2.3
       cjs-module-lexer: 2.3.0
     optionalDependencies:
-      happy-dom: 20.14.6
+      happy-dom: 21.0.4
       jsdom: 30.1.3
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
@@ -5061,7 +5061,7 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
-  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5(@types/node@25.9.9)(happy-dom@20.14.6)(jsdom@30.1.3)(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))':
+  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5(@types/node@25.9.9)(happy-dom@21.0.4)(jsdom@30.1.3)(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))':
     dependencies:
       '@adobe/css-tools': 4.5.0
       '@testing-library/dom': 10.4.2
@@ -5071,7 +5071,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
     optionalDependencies:
-      vitest: 5.0.5(@types/node@25.9.9)(happy-dom@20.14.6)(jsdom@30.1.3)(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1))
+      vitest: 5.0.5(@types/node@25.9.9)(happy-dom@21.0.4)(jsdom@30.1.3)(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1))
 
   '@testing-library/react@16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
@@ -5692,7 +5692,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  happy-dom@20.14.6:
+  happy-dom@21.0.4:
     dependencies:
       '@types/node': 25.9.9
       '@types/whatwg-mimetype': 3.0.2
@@ -6722,7 +6722,7 @@ snapshots:
       yaml: 2.9.1
     optional: true
 
-  vitest@5.0.5(@types/node@25.9.9)(happy-dom@20.14.6)(jsdom@30.1.3)(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)):
+  vitest@5.0.5(@types/node@25.9.9)(happy-dom@21.0.4)(jsdom@30.1.3)(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)):
     dependencies:
       '@types/chai': 5.2.3
       '@vitest/mocker': 5.0.5(msw@3.0.3(@types/node@25.9.9)(supports-color@7.2.0)(typescript@6.0.3)(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1)))(vite@8.3.5(@types/node@25.9.9)(jiti@2.7.0)(yaml@2.9.1))
@@ -6740,7 +6740,7 @@ snapshots:
       why-is-node-running: 3.2.1
     optionalDependencies:
       '@types/node': 25.9.9
-      happy-dom: 20.14.6
+      happy-dom: 21.0.4
       jsdom: 30.1.3
     transitivePeerDependencies:
       - msw

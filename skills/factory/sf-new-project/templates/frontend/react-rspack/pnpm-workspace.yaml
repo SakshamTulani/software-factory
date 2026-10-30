@@ -1,0 +1,5 @@
+# Rstest 0.12 declares happy-dom ^20 but runs on 21, which fixes two high
+# advisories in 20.x (sf-factory ADR 0021). Drop this when Rstest's range includes 21.
+peerDependencyRules:
+  allowedVersions:
+    "@rstest/core>happy-dom": "21"

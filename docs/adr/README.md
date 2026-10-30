@@ -24,3 +24,4 @@ Decisions that shape the factory and every project it generates. Numbered and ne
 | [0018](0018-sf-retro-from-matt-pocock.md) | accepted | `/sf-retro`, forked from Matt Pocock's `retro`, proposes environment fixes and drafts sf-factory issues for factory ones |
 | [0019](0019-tests-reach-real-stores-through-module-providers.md) | accepted | No store singletons: each module's `Provider` builds its store, so tests use real stores with a fresh cache and the fake socket; `src/test/` helpers; one way to write a test, lint-enforced |
 | [0020](0020-trust-controls-from-addy-osmanis-factory.md) | accepted | From Addy's factory: prove new tests, human read of changed tests and load-bearing paths, git guard hook, fresh-context verifier and critic, `check:fast`/`check:deep`, `/sf-retro 30d` |
+| [0021](0021-happy-dom-21-ahead-of-rstests-range.md) | accepted | happy-dom 21.0.4 for its two high-advisory fixes, allowed past Rstest's `^20` peer range in `pnpm-workspace.yaml` |
