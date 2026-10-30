@@ -32,6 +32,7 @@ sf-simplify
 sf-spec
 sf-test
 sf-transcribe
+sf-upstream
 shipping-and-launch
 source-driven-development
 spec-driven-development

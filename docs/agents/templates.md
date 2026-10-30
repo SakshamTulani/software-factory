@@ -12,7 +12,7 @@ Adding a template means a row here and a row in `sf-new-project`'s template tabl
 
 - `skills.txt`: the skills it installs (not copied into the project). A frontend template lists every skill in `skills/core/` and `skills/frontend/`; a backend template would list `skills/core/` and `skills/backend/`.
 - A root `AGENTS.md` (essentials and a "read when relevant" table only), plus `CLAUDE.md` holding just `@AGENTS.md`.
-- `docs/agents/issue-tracker.md` and `docs/agents/git.md`: placeholders that `/sf-setup` replaces with an adapter (tracker `github`, `local` or `hybrid`; git `develop-main` or `main`).
+- `docs/agents/issue-tracker.md` and `docs/agents/git.md`: placeholders that `/sf-setup` replaces with an adapter (tracker `github`, `local` or `hybrid`; git `develop-main` or `main`). `docs/agents/upstream.md`: a placeholder `/sf-setup` replaces with the project's upstream sources (ADR 0022).
 - `docs/specs/` and `docs/adr/`, each with `_template` and a `README.md` index; `docs/client.md`, `docs/product.md`, `GLOSSARY.md`.
 - `DESIGN.md` (frontend): a placeholder that `sf-new-project` replaces with the chosen design system; `components.json` for shadcn.
 - `.github/workflows/pr-guard.yml` (branch flow, plus a person's read of changed existing tests and of `factory.json` `loadBearing` paths) and `.github/pull_request_template.md`.

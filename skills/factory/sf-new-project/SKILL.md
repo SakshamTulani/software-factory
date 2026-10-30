@@ -43,7 +43,7 @@ Lead with the recommended answer where there is one, so the user can accept it i
    - **Create one now**: ask for the owner (user or org) and confirm `<owner>/<project-name>`, private. Creating a repo is visible to others, so create it only after the user says yes in step 3.
    - **None for now**: the project stays local; `sf-setup` will then recommend the `local` tracker.
 
-The tracker, git strategy and conversation log are asked by `sf-setup` in step 7.
+The tracker, git strategy, conversation log and upstream sources are asked by `sf-setup` in step 7.
 
 ## 3. Confirm
 
@@ -109,9 +109,9 @@ Write `factory.json`:
 
 `sf-setup` fills `tracker`, `git` and `conversations`. `loadBearing` lists the paths where a mistake reaches every screen or weakens a guardrail: `pr-guard.yml` requires a person's read of any PR touching them, `/sf-review` runs the `critic` agent on them, and `/sf-build auto` stops before changing one. Add the project's auth and permission code when it exists. Patterns are git glob pathspecs (`**` crosses folders).
 
-## 7. Configure the tracker, git strategy and conversation log
+## 7. Configure the tracker, git strategy, conversation log and upstream sources
 
-Run the `sf-setup` skill. It asks about the tracker, the git strategy and the conversation log, and writes `docs/agents/issue-tracker.md`, `docs/agents/git.md`, the matching workflow files and any hook.
+Run the `sf-setup` skill. It asks about the tracker, the git strategy, the conversation log and, for a frontend, the upstream sources (backend repos, OpenAPI/Swagger, doc links). It writes `docs/agents/issue-tracker.md`, `docs/agents/git.md`, `docs/agents/upstream.md`, the matching workflow files and any hook.
 
 ## 8. Done
 

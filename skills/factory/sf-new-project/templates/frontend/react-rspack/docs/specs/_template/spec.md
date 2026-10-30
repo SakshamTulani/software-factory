@@ -26,6 +26,16 @@ Ids are permanent and local to this spec. Tasks cite them; tests and other docs 
 
 Which modules in `src/modules/` change, and any new module. Which REST endpoints and WS topics are consumed.
 
+## Upstream contract
+
+What this spec takes from upstream ([docs/agents/upstream.md](../../agents/upstream.md)), cited, not decided here. One row per source; `sf-upstream` fills it.
+
+| Source | SHA or version | Read on | Used |
+|---|---|---|---|
+| <!-- backend --> | <!-- 3f2a9c1 --> | <!-- 2026-11-02 --> | <!-- `GET /vehicles/{id}`, `VehicleStatus`; `docs/specs/immobilise/spec.md` REQ-3 --> |
+
+Gaps go to Open questions as `Waiting on <owner/repo>#<n>: <gap>`.
+
 ## Boundaries
 
 - **Always:** …

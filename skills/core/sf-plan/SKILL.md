@@ -8,7 +8,7 @@ Invoke the planning-and-task-breakdown skill.
 
 Find the spec: the `docs/specs/<slug>/spec.md` named in `$ARGUMENTS`, or else the approved spec in `docs/specs/README.md` with no plan. If there are several, ask which one. If its front matter is not `status: approved`, stop and say the spec needs human approval first.
 
-Read the spec, the project's architecture skill (`frontend-architecture` for frontend projects) and the relevant code. Then:
+Read the spec, the project's architecture skill (`frontend-architecture` for frontend projects) and the relevant code. If the spec has an "Upstream contract" section, run the `sf-upstream` skill's drift check on it first; if the contract changed, stop and show the difference. Tasks, test data and MSW handlers follow the cited contract, never a shape guessed from the UI. Then:
 
 1. Enter plan mode — read only, no code changes
 2. Identify the dependency graph between components

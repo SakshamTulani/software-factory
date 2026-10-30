@@ -21,6 +21,7 @@ Task arrives
     ├── Don't know what you want yet? ──────→ interview-me
     ├── Have a rough concept, need variants? → idea-refine
     ├── New project/feature/change? ──→ spec-driven-development
+    ├── Need backend/business detail? ─→ sf-upstream (read or request upstream)
     ├── No quality bar written down? ──→ constraint-driven-development
     ├── Have a spec, need tasks? ──────→ planning-and-task-breakdown
     ├── Implementing code? ────────────→ incremental-implementation + frontend-architecture

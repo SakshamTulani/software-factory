@@ -33,5 +33,6 @@ pnpm format       # Biome: format and sort imports
 | Starting a feature, bug fix or refactor | the `project-workflow` skill |
 | Branching, committing or opening a PR (`file-pr`) | [docs/agents/git.md](docs/agents/git.md) |
 | Creating, reading or updating issues and tasks | [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md) |
+| Needing business, backend or API detail about a feature | [docs/agents/upstream.md](docs/agents/upstream.md) |
 | Looking for why something is built this way | [docs/adr/](docs/adr/README.md) |
 | Looking for what a feature must do | [docs/specs/](docs/specs/README.md) |

@@ -37,13 +37,15 @@ If you're unsure, take the full path.
 | `file-pr` | `file-pr` | the PR (both PRs under `develop-main`), from the PR template |
 | `/sf-retro` (optional) | `sf-retro` | after a session that was harder than it should have been: proposed checks, pointers and review rules; factory issues for factory skills. `/sf-retro 30d` monthly |
 
-**Other commands**, any time: `/sf-test` (TDD on its own, the light path), `/sf-simplify` (simplify recent changes without changing behaviour), `/sf-constraints` (write or check `CONSTRAINTS.md`), `/sf-webperf` (performance audit), `/sf-transcribe` (save the session), `/sf-setup` (switch tracker, git strategy or conversation log). `/sf-new-module` runs inside `/sf-build` when a plan task names it.
+**Other commands**, any time: `/sf-test` (TDD on its own, the light path), `/sf-simplify` (simplify recent changes without changing behaviour), `/sf-constraints` (write or check `CONSTRAINTS.md`), `/sf-webperf` (performance audit), `/sf-transcribe` (save the session), `/sf-upstream` (read business and API context from upstream, or request a contract change), `/sf-setup` (switch tracker, git strategy, conversation log or upstream sources). `/sf-new-module` runs inside `/sf-build` when a plan task names it.
 
 **A new module starts with `/sf-spec`, not with scaffolding.** The spec settles the module's name, boundary, endpoints and WS topics. The plan's first task is `/sf-new-module <name>`, run during `/sf-build`.
 
 **Gates are recorded in front matter.** `/sf-plan` does not start until `spec.md` says `status: approved`. `/sf-build` does not start until `plan.md` says `status: approved`. Only a human sets `approved`. Agents never approve their own work.
 
 **Names, not numbers.** Specs, branches and ADRs are named, never numbered from a shared counter, because two branches would take the same number and clash at merge. A spec is `docs/specs/<slug>/` and its branch `feat/<slug>`; an ADR is `docs/adr/YYYY-MM-DD-<slug>.md`. Older `NNN-` specs and ADRs keep their names.
+
+**This repo records only its own decisions.** Specs and ADRs here cover what this project does: for a frontend, its screens, modules, state and how it calls the API. Business rules and the API contract live upstream (backend repos, OpenAPI, product docs, listed in [upstream.md](../../../docs/agents/upstream.md)) and are cited by link and SHA or version, never restated as our decision. When upstream lacks something, request it there with `sf-upstream`; never write the upstream's spec here.
 
 **Requirement ids.** Each success criterion is numbered `REQ-1`, `REQ-2` … within its spec, and cited as `<slug>/REQ-<n>` outside the spec's folder. Ids are never renumbered once approved; supersede instead. Tasks cite the ids they advance, and tests are named after them (the project's testing skill, `frontend-testing` for frontend projects).
 
