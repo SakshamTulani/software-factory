@@ -107,7 +107,7 @@ Write `factory.json`:
 }
 ```
 
-`sf-setup` fills `tracker`, `git` and `conversations`. `loadBearing` lists the paths where a mistake reaches every screen or weakens a guardrail: `pr-guard.yml` requires a person's read of any PR touching them, `/sf-review` runs the `critic` agent on them, and `/sf-build auto` stops before changing one. Add the project's auth and permission code when it exists. Patterns are git glob pathspecs (`**` crosses folders).
+`sf-setup` fills `tracker`, `git` and `conversations`. `loadBearing` lists the paths where a mistake reaches every screen or weakens a guardrail: `.claude/hooks/guard-load-bearing.sh` asks the user before any edit to them or to `factory.json`, `pr-guard.yml` requires a person's read of any PR touching them, `/sf-review` runs the `critic` agent on them, and `/sf-build auto` stops before changing one. Add the project's auth and permission code when it exists. Patterns are git glob pathspecs (`**` crosses folders).
 
 ## 7. Configure the tracker, git strategy, conversation log and upstream sources
 

@@ -56,7 +56,7 @@ Agents implement, check and review; a person decides. Beyond approving the spec 
 - **any change to an existing test.** An agent can rewrite an assertion to fit broken code. New tests don't need this.
 - **any change to a load-bearing path** (`factory.json` `loadBearing`): the shared HTTP client, socket, config, app wiring and the guardrails themselves. `/sf-review` also runs the `critic` agent on these.
 
-Agents never merge, never push to `main` or `develop`, and never skip hooks (`.claude/hooks/guard-git.sh`). Edits to the guardrails (lint, architecture and test config, `.claude/`, `AGENTS.md`, `CONSTRAINTS.md`) ask the user first.
+Agents never merge, never push to `main` or `develop`, and never skip hooks (`.claude/hooks/guard-git.sh`). Edits to the guardrails (lint, architecture and test config, `.claude/`, `AGENTS.md`, `CONSTRAINTS.md`) ask the user first. So do edits to any load-bearing path or to `factory.json`, unless an approved plan task names that path; `.claude/hooks/guard-load-bearing.sh` asks on every such edit in projects that have it.
 
 **Checks by cost:** the Stop hook runs `pnpm check:fast` after every turn; each task commits on a green `pnpm check`; CI runs `pnpm check` and the build; `/sf-review` runs `pnpm check:deep` when a load-bearing path changed, and proves new tests fail without the change (`prove-test.sh`).
 

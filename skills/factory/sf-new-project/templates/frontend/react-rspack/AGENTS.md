@@ -21,6 +21,7 @@ pnpm format       # Biome: format and sort imports
 - Extremely concise. Sacrifice grammar for the sake of concision: drop articles, filler and ceremony; fragments fine. Never drop `not`/`never`/`only`, numbers, or exact code, commands, paths and errors. Applies to chat, plans, task notes and commit bodies. Specs, ADRs and PR descriptions stay concise but in full sentences, because people read them later.
 - Follow the lifecycle in the `project-workflow` skill. It decides whether the change needs a spec.
 - A task is done only when `pnpm check` is green. Never weaken a dependency-cruiser rule, skip a test or add a suppression to get there; ask instead.
+- Ask before changing a load-bearing path (`factory.json` `loadBearing`) or `factory.json`, unless an approved plan task names that path. `.claude/hooks/guard-load-bearing.sh` asks the user on every such edit.
 - Use the domain words in [GLOSSARY.md](GLOSSARY.md).
 
 ## Read when relevant
