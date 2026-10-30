@@ -27,7 +27,7 @@ src/
 modules/<module>/
 │ ── PRESENTATION ──
 ├── ui/              # components: render and handle input, nothing else
-├── hooks/           # data hooks (read the store) + business hooks (apply model.ts)
+├── hooks/           # data hooks (read the store) + business hooks (apply model.ts) + the store's context
 │ ── BUSINESS ──
 ├── model.ts         # pure business rules: calculations, validation, derived state
 │ ── DATA ACCESS ──
@@ -38,7 +38,8 @@ modules/<module>/
 ├── api/             # raw REST calls + their DTO types
 │ ── CONTRACT ──
 ├── types.ts         # domain entity types, no logic; every tier may import it
-├── module.tsx       # exports an AppModule: featureId, title, routes (registered in src/app/modules.ts)
+├── module.tsx       # the module's composition root: an AppModule with featureId, title, routes and the Provider that builds its store
+├── testing.ts       # test data builders (build<Entity>, buildApi<Entity>); only tests import it
 └── index.ts         # the module's public API
 ```
 
@@ -61,6 +62,7 @@ Also enforced:
 - Only `store/` and `hooks/` import TanStack Query. Only `realtime/` imports the WS client.
 - `model.ts` and `types.ts` import no React, TanStack Query or WS client.
 - `shared/` imports no module.
+- Only tests and `src/test/` import a `testing.ts` (builders and fakes).
 - Only `src/shared/ui/data-grid/` imports AG Grid; `ag-grid-enterprise` is never imported (it needs a licence).
 - Only `src/shared/lib/format.ts` imports `date-fns`, and only it may call `toLocale*String` or `Intl` formatters (the Biome rule in `biome-plugins/no-raw-formatting.grit`; shadcn's generated primitives in `src/shared/ui/*.tsx` are exempt).
 - No circular imports.
@@ -104,8 +106,39 @@ export class CommandCenterStore {
 
 // hooks/useVehicleLiveInfo.ts
 export const useVehicleLiveInfo = (id: string) =>
-  useQuery({ ...commandCenterStore.liveInfoOptions(), select: (all) => all[id] })
+  useQuery({ ...useCommandCenterStore().liveInfoOptions(), select: (all) => all[id] })
 ```
+
+### Hooks reach the store through context
+
+There are no store singletons. Each module's store is built once by its `Provider` from the `AppDeps` it's given (`{ qc, realtime }`), and hooks read it with `use<Pascal>Store()`. `src/app/App.tsx` passes the real cache and socket; tests pass a fresh `QueryClient` and the fake socket (`renderWithProviders`, the `frontend-testing` skill). So a test exercises the real store, repository and mappers, and only the network is fake.
+
+```tsx
+// hooks/commandCenterStoreContext.tsx
+const CommandCenterStoreContext = createContext<CommandCenterStore | null>(null)
+export const CommandCenterStoreProvider = CommandCenterStoreContext.Provider
+export function useCommandCenterStore() {
+  const store = useContext(CommandCenterStoreContext)
+  if (!store) throw new Error("useCommandCenterStore needs commandCenterModule's Provider above it")
+  return store
+}
+
+// module.tsx: the only file that wires repository and realtime into the store
+function CommandCenterProvider({ deps, children }: { deps: AppDeps; children: ReactNode }) {
+  const [store] = useState(() => new CommandCenterStore({
+    qc: deps.qc,
+    repo: createCommandCenterRepository(),
+    socket: createCommandCenterSocket(deps.realtime),
+  }))
+  return <CommandCenterStoreProvider value={store}>{children}</CommandCenterStoreProvider>
+}
+
+export const commandCenterModule: AppModule = {
+  featureId: "command-center", title: "Command center", routes: [...], Provider: CommandCenterProvider,
+}
+```
+
+`ModuleProviders` (`@/shared/lib/app-module`) nests every registered module's `Provider`, so a module may use another module's public hooks.
 
 - Query keys come from one `keys` object per store. Never write a key inline in a hook.
 - Data fed by the socket uses `staleTime: Infinity`. Throttle the socket in the store with `batch()`, not in components.
@@ -121,6 +154,7 @@ export const useVehicleLiveInfo = (id: string) =>
 | Business hook | `use<Feature><Result>.ts` | `useCanSendCommand.ts` |
 | Form/view hook | `use<Feature>Form.ts` | `useSendCommandForm.ts` |
 | API / mappers / repository / store / socket | `<module><Kind>.ts` | `commandCenterApi.ts` |
+| Store context | `hooks/<module>StoreContext.tsx` | `commandCenterStoreContext.tsx` |
 | DTO type | `Api<Entity>` | `ApiLiveInfo` |
 
 One hook per file. A module's `index.ts` exports only what other modules or `app/` use.

@@ -1,0 +1,15 @@
+language js
+
+// The frontend-testing skill's mechanical rules: no snapshots, and user input
+// through userEvent (renderWithProviders returns one), not fireEvent.
+or {
+  `$value.toMatchSnapshot($args)` as $hit where {
+    register_diagnostic(span=$hit, message="No snapshot tests: assert on what the user sees (frontend-testing).")
+  },
+  `$value.toMatchInlineSnapshot($args)` as $hit where {
+    register_diagnostic(span=$hit, message="No snapshot tests: assert on what the user sees (frontend-testing).")
+  },
+  `fireEvent.$event($args)` as $hit where {
+    register_diagnostic(span=$hit, message="Drive the UI with userEvent (the user from renderWithProviders), not fireEvent (frontend-testing).")
+  }
+}

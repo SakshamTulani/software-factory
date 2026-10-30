@@ -112,8 +112,15 @@ module.exports = {
       severity: "error",
       comment: "Only store/ and hooks/ may use TanStack Query. Components call a hook.",
       from: {
+        // app-module types the QueryClient a module's Provider receives; src/test builds one per test.
         path: "^src/",
-        pathNot: [`${MODULE}(store|hooks)/`, "^src/app/", TEST],
+        pathNot: [
+          `${MODULE}(store|hooks)/`,
+          "^src/app/",
+          "^src/shared/lib/app-module\\.tsx$",
+          "^src/test/",
+          TEST,
+        ],
       },
       to: { path: "node_modules/@tanstack/(react-query|query-core)/" },
     },
@@ -160,6 +167,14 @@ module.exports = {
         path: "^src/modules/[^/]+/",
         pathNot: ["^src/modules/$1/", "^src/modules/[^/]+/index\\.tsx?$"],
       },
+    },
+    {
+      name: "testing-only-in-tests",
+      severity: "error",
+      comment:
+        "testing.ts holds test builders and fakes (frontend-testing). Only tests and src/test/ import it.",
+      from: { path: "^src/", pathNot: [TEST, "^src/test/", "(^|/)testing\\.ts$"] },
+      to: { path: "(^|/)testing\\.ts$" },
     },
     {
       name: "shared-is-leaf",

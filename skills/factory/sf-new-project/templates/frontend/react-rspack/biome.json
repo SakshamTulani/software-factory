@@ -23,7 +23,9 @@
         "noUnusedImports": "error"
       },
       "suspicious": {
-        "noExplicitAny": "error"
+        "noExplicitAny": "error",
+        "noFocusedTests": "error",
+        "noSkippedTests": "error"
       },
       "nursery": {
         "useSortedClasses": {
@@ -56,5 +58,5 @@
       }
     }
   },
-  "plugins": ["./biome-plugins/no-raw-formatting.grit"]
+  "plugins": ["./biome-plugins/no-raw-formatting.grit", "./biome-plugins/test-conventions.grit"]
 }

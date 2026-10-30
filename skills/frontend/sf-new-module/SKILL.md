@@ -30,16 +30,18 @@ src/modules/<name>/
 ├── realtime/<camel>Socket.ts
 ├── store/<camel>Store.ts            the keys object + a class taking { qc, repo, socket }
 ├── store/<camel>Store.test.ts
-├── hooks/                           empty until a task adds a hook (one hook per file)
+├── hooks/<camel>StoreContext.tsx    the store's context: <Pascal>StoreProvider and use<Pascal>Store() (frontend-architecture)
 ├── ui/                              empty until a task adds a component
-├── module.tsx                       export const <camel>Module: AppModule = { featureId: "<name>", title: "<Title>", routes: [] }
-│                                    (AppModule from "@/shared/lib/app-module")
+├── testing.ts                       test builders, one per entity as the spec adds them: build<Entity>(overrides), buildApi<Entity>(overrides)
+├── module.tsx                       <Pascal>Provider builds the store from deps; export const <camel>Module: AppModule =
+│                                    { featureId: "<name>", title: "<Title>", routes: [], Provider: <Pascal>Provider }
+│                                    (AppModule, AppDeps from "@/shared/lib/app-module")
 └── index.ts                         export { <camel>Module } from "./module"; nothing else yet
 ```
 
 Each `*.test.ts` stub holds one `describe` naming the layer and a single `it.todo("…")`. Never write a passing test with no assertion; the plan's tasks replace the todos.
 
-Empty folders (`hooks/`, `ui/`) get a `.gitkeep`.
+The empty `ui/` folder gets a `.gitkeep`. `testing.ts` starts with a comment saying what it is for and no exports.
 
 ## Register it
 
