@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # New project
 
-Creates a client project in the current directory. This skill is installed globally (`npx -y skills@1.7.4 add SakshamTulani/sf-factory -s sf-new-project -g -a claude-code`), because it runs before the project exists.
+Creates a client project in the current directory. This skill is installed globally (`npx -y skills@1.7.4 add SakshamTulani/software-factory -s sf-new-project -g -a claude-code`), because it runs before the project exists.
 
 Everything it copies lives in this skill's own folder:
 
@@ -22,7 +22,7 @@ This is a prompt-driven skill. Explore, ask, show a draft, then write.
 
 - The directory should be empty, or hold only a fresh `git init` / a README. If it holds code, stop and ask; this skill doesn't convert existing repos.
 - `node --version` is 22.20 or later; the `skills` CLI needs it.
-- The machine can read `SakshamTulani/sf-factory`: `git ls-remote https://github.com/SakshamTulani/sf-factory.git HEAD` prints a commit. If not, tell the user to run `gh auth login` then `gh auth setup-git` (or add an SSH key), and stop.
+- The machine can read `SakshamTulani/software-factory`: `git ls-remote https://github.com/SakshamTulani/software-factory.git HEAD` prints a commit. If not, tell the user to run `gh auth login` then `gh auth setup-git` (or add an SSH key), and stop.
 
 ## 2. Ask, one question at a time
 
@@ -68,7 +68,7 @@ Show the answers and what will be written, including any repo to be created. Let
 Read the skill names from `templates/<repo-type>/<template>/skills.txt` (skip blank lines and `#` lines), then from the project root:
 
 ```bash
-DISABLE_TELEMETRY=1 npx -y skills@1.7.4 add SakshamTulani/sf-factory -a claude-code codex -y -s <name> <name> …
+DISABLE_TELEMETRY=1 npx -y skills@1.7.4 add SakshamTulani/software-factory -a claude-code codex -y -s <name> <name> …
 ```
 
 Check: `.agents/skills/<name>/SKILL.md` exists for every listed name, `.claude/skills/` resolves to them, and `skills-lock.json` lists them. If any is missing, stop and report what the CLI printed.
@@ -79,8 +79,8 @@ Write `factory.json`:
 
 ```json
 {
-  "factory": "SakshamTulani/sf-factory",
-  "factoryCommit": "<sha from: git ls-remote https://github.com/SakshamTulani/sf-factory.git HEAD>",
+  "factory": "SakshamTulani/software-factory",
+  "factoryCommit": "<sha from: git ls-remote https://github.com/SakshamTulani/software-factory.git HEAD>",
   "template": "<repo-type>/<template>",
   "designSystem": "<name>",
   "createdOn": "<YYYY-MM-DD>",

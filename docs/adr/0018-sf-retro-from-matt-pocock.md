@@ -15,7 +15,7 @@ The lifecycle ends at `/sf-ship`. Nothing turns a hard session into a lasting im
 
 - Fork Matt's `retro` as `sf-retro`, user-invoked, in `skills/core/`. It reads the current session, a transcript from `sf-transcribe`'s conversation log, or a raw session log.
 - Its categories map to this stack: automated checks go into `pnpm check` (Biome, GritQL plugins, dependency-cruiser, types, tests); judgement-call rules go into `docs/agents/review.md`, which `code-review-and-quality` now applies; the quality bar goes into `CONSTRAINTS.md`; `AGENTS.md` takes navigation pointers only.
-- A finding about a factory skill, or one every project of a template needs, becomes a drafted issue on `SakshamTulani/sf-factory`, stripped of client detail and filed with `gh` only on the user's yes.
+- A finding about a factory skill, or one every project of a template needs, becomes a drafted issue on `SakshamTulani/software-factory`, stripped of client detail and filed with `gh` only on the user's yes.
 - It only proposes. Chosen project fixes are applied as a light-path change, and a new check must be shown to fail on the original mistake.
 
 ## Alternatives considered

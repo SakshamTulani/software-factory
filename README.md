@@ -5,11 +5,11 @@ Intellicar's software factory. It creates each client project from shared templa
 ## Set up (each developer, once)
 
 1. Node 22.20 or later.
-2. Read access to this repo through git: an SSH key on your GitHub account, or `gh auth login` then `gh auth setup-git`. Check: `git ls-remote https://github.com/SakshamTulani/sf-factory.git HEAD` prints a commit.
+2. Read access to this repo through git: an SSH key on your GitHub account, or `gh auth login` then `gh auth setup-git`. Check: `git ls-remote https://github.com/SakshamTulani/software-factory.git HEAD` prints a commit.
 3. Install the project creator globally:
 
 ```bash
-DISABLE_TELEMETRY=1 npx -y skills@1.7.4 add SakshamTulani/sf-factory -s sf-new-project -g -a claude-code -y
+DISABLE_TELEMETRY=1 npx -y skills@1.7.4 add SakshamTulani/software-factory -s sf-new-project -g -a claude-code -y
 ```
 
 ## Start a project

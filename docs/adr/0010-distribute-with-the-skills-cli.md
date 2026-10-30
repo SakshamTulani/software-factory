@@ -15,7 +15,7 @@ ADR 0007 copied a project kit into each project once. That kept projects safe fr
 
 ## Decision
 
-- Everything distributable is a skill under `skills/` in this repo, the private `SakshamTulani/sf-factory`. Projects install it with `npx -y skills@1.7.4 add SakshamTulani/sf-factory`, using each developer's own git access.
+- Everything distributable is a skill under `skills/` in this repo, the private `SakshamTulani/software-factory`. Projects install it with `npx -y skills@1.7.4 add SakshamTulani/software-factory`, using each developer's own git access.
 - `sf-new-project` is installed globally. It carries the templates, design systems and `common/` files in its own folder, copies them, and installs the skills the chosen template lists in `skills.txt` at project scope.
 - Installed skills are committed. A project changes only when someone runs `npx -y skills@1.7.4 update`, and the diff is reviewed in a PR.
 - Commands become user-invoked skills, and everything we ship gets an `sf-` prefix (`/sf-spec`, `/sf-build`, `/sf-new-project` …), so names can't clash with Claude Code's built-ins.

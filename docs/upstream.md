@@ -80,7 +80,7 @@ Neither skill is installed: both are built to choose a style for marketing sites
 - Renamed `sf-retro`. The `writing-for-agents` step is removed (not shipped).
 - Reads `sf-transcribe`'s conversation log as well as the current session.
 - Categories point at `pnpm check` (Biome, GritQL plugins, dependency-cruiser), `docs/agents/review.md` instead of `CODING_STANDARDS.md`, and `CONSTRAINTS.md`.
-- New category: a factory skill at fault becomes a drafted issue on `SakshamTulani/sf-factory`, filed with `gh` only on a yes.
+- New category: a factory skill at fault becomes a drafted issue on `SakshamTulani/software-factory`, filed with `gh` only on a yes.
 - Applies the fixes the user picks, and verifies a new check fails on the original mistake.
 
 Not taken: the rest of the repo (its lifecycle overlaps Addy's), `agents/openai.yaml`.

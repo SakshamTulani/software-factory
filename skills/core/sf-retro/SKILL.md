@@ -53,7 +53,7 @@ Then ask which to apply. Wait for the answer.
 ## 4. Apply the chosen ones
 
 - **Project fixes** are a light-path change: on a branch, as in `docs/agents/git.md`, one commit per fix.
-- **Factory fixes:** draft an issue for sf-factory with the title, the moment, the skill or template file at fault, and the proposed change. Write it for every client: no client names, data, endpoints or transcript excerpts with confidential detail. Show the draft. On a yes, file it with `gh issue create --repo SakshamTulani/sf-factory --title "retro: …" --body "…"`. If `gh` can't reach the repo, print the draft for the user to pass on. Where the project can't wait, also apply a project-side fix and say it is temporary.
+- **Factory fixes:** draft an issue for sf-factory with the title, the moment, the skill or template file at fault, and the proposed change. Write it for every client: no client names, data, endpoints or transcript excerpts with confidential detail. Show the draft. On a yes, file it with `gh issue create --repo SakshamTulani/software-factory --title "retro: …" --body "…"`. If `gh` can't reach the repo, print the draft for the user to pass on. Where the project can't wait, also apply a project-side fix and say it is temporary.
 
 ## Period mode: `/sf-retro 30d`
 
