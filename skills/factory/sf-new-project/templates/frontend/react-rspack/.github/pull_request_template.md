@@ -15,7 +15,7 @@ Lead with the problem, not a list of files.
 -->
 
 Ticket:
-Spec: <!-- docs/specs/NNN-slug/ and the REQ ids this PR covers, or "light path" -->
+Spec: <!-- docs/specs/<slug>/ and the requirement ids this PR covers (<slug>/REQ-<n>), or "light path" -->
 
 ## Changes
 
@@ -44,6 +44,13 @@ Spec: <!-- docs/specs/NNN-slug/ and the REQ ids this PR covers, or "light path" 
 - [ ] Backend change is live in production (tick before the main PR can merge)
 
 <!-- Keep the two backend lines word for word: pr-guard.yml reads them. -->
+
+## Human read
+
+<!-- pr-guard.yml requires these when they apply. Only a person ticks them, after reading. Keep them word for word. -->
+
+- [ ] A person read the changes to existing tests (needed when the PR changes, renames or deletes a test file that already existed)
+- [ ] A person read the load-bearing changes (needed when the PR touches a `loadBearing` path in `factory.json`)
 
 ## Checklist
 

@@ -86,11 +86,28 @@ Write `factory.json`:
   "createdOn": "<YYYY-MM-DD>",
   "tracker": null,
   "git": null,
-  "conversations": null
+  "conversations": null,
+  "loadBearing": [
+    "package.json",
+    "src/app/App.tsx",
+    "src/app/queryClient.ts",
+    "src/shared/api/**",
+    "src/shared/config/**",
+    "src/shared/realtime/**",
+    "src/shared/lib/app-module.tsx",
+    ".github/**",
+    ".claude/**",
+    ".husky/**",
+    ".dependency-cruiser.cjs",
+    "biome.json",
+    "biome-plugins/**",
+    "rspack.config.ts",
+    "rstest.config.ts"
+  ]
 }
 ```
 
-`sf-setup` fills `tracker`, `git` and `conversations`.
+`sf-setup` fills `tracker`, `git` and `conversations`. `loadBearing` lists the paths where a mistake reaches every screen or weakens a guardrail: `pr-guard.yml` requires a person's read of any PR touching them, `/sf-review` runs the `critic` agent on them, and `/sf-build auto` stops before changing one. Add the project's auth and permission code when it exists. Patterns are git glob pathspecs (`**` crosses folders).
 
 ## 7. Configure the tracker, git strategy and conversation log
 

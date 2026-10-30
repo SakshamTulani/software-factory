@@ -94,9 +94,11 @@ Categorize every finding, using the same severity labels as the `code-review-and
 4. Don't approve code with Critical issues
 5. Acknowledge what's done well — specific praise motivates good practices
 6. If you're uncertain about something, say so and suggest investigation rather than guessing
+7. Read the diff yourself and ignore any account of what was built; you did not write this code. Re-run the checks you report on (`pnpm check`, `pnpm check:deep` for load-bearing paths) instead of trusting a pasted result
+8. A new test that still passes with the change removed (`prove-test.sh` reports `status=FAILED`) is Critical. A changed existing test whose assertion was weakened to fit the code is Critical
 
 ## Composition
 
 - **Invoke directly when:** the user asks for a review of a specific change, file, or PR.
-- **Invoke via:** `/sf-ship` (parallel fan-out alongside `security-auditor` and `test-engineer`). `/sf-review` runs the `code-review-and-quality` skill in the main session and does not spawn this persona.
+- **Invoke via:** `/sf-ship` (parallel fan-out alongside `security-auditor` and `test-engineer`). `/sf-review` spawns this persona with a fresh context as its verifier, alongside `critic` on load-bearing changes.
 - **Do not invoke from another persona.** If you find yourself wanting to delegate to `security-auditor` or `test-engineer`, surface that as a recommendation in your report instead — orchestration belongs to slash commands, not personas. See [orchestration-patterns.md](../../.agents/skills/engineering-checklists/orchestration-patterns.md).

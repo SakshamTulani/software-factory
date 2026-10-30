@@ -18,6 +18,8 @@
     "test": "rstest",
     "test:watch": "rstest --watch",
     "check": "pnpm typecheck && pnpm lint && pnpm depcruise && pnpm test",
+    "check:fast": "pnpm typecheck && pnpm lint && pnpm depcruise && rstest --changed --passWithNoTests",
+    "check:deep": "pnpm check && pnpm build && pnpm audit --audit-level high",
     "prepare": "husky"
   },
   "dependencies": {

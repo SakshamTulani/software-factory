@@ -9,7 +9,9 @@ Single pnpm package. Run everything from the repo root.
 ```bash
 pnpm install      # needs git access to intellicars/fmswsclientjs (SSH key or gh auth setup-git)
 pnpm dev          # dev server on :3000; copy .env.example to .env first
-pnpm check        # Definition of Done: typecheck + lint + depcruise + test
+pnpm check:fast   # what the Stop hook runs each turn: typecheck + lint + depcruise + tests related to changes
+pnpm check        # Definition of Done, before every commit and in CI: the same with every test
+pnpm check:deep   # check + build + pnpm audit, for load-bearing changes (factory.json loadBearing)
 pnpm depcruise    # architecture rules only (.dependency-cruiser.cjs)
 pnpm format       # Biome: format and sort imports
 ```

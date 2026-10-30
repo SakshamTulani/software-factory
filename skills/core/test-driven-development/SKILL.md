@@ -10,7 +10,11 @@ description: Drives development with tests using the red-green-refactor loop. Us
 Write a failing test before writing the code that makes it pass. For bug fixes, reproduce the bug with a test before attempting a fix. Tests are proof — "seems right" is not done. A codebase with good tests is an AI agent's superpower; a codebase without tests is a liability.
 
 
-**Project conventions.** Follow the project's testing skill (`frontend-testing` for frontend projects) for what each layer is tested with and its fakes. Name each test after the spec requirement it proves (`it("REQ-004: …")`), so `grep REQ-004` finds it.
+**Project conventions.** Follow the project's testing skill (`frontend-testing` for frontend projects) for what each layer is tested with and its fakes. Name each test after the spec requirement it proves (`it("command-center/REQ-4: …")`), so `grep -w command-center/REQ-4` finds it.
+
+**Prove the test tests the change.** Before review, run [prove-test.sh](prove-test.sh) from the project root on the committed branch: `bash .agents/skills/test-driven-development/prove-test.sh <base-ref> -- <test command for the new tests>`. It removes the non-test part of the branch's change, runs the tests and restores the change. `PROOF: status=PROVEN` means the tests fail without the change. `status=FAILED` means they pass without it and prove nothing about it: rewrite them. It needs a clean working tree.
+
+**Never edit an existing test to make it pass.** A test that already exists is evidence; changing, renaming or deleting it needs a person's read (`pr-guard.yml` enforces this on the PR). Add a new test, or stop and say why the old one is wrong.
 ## When to Use
 
 - Implementing any new logic or behavior

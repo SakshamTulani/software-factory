@@ -15,10 +15,10 @@ Adding a template means a row here and a row in `sf-new-project`'s template tabl
 - `docs/agents/issue-tracker.md` and `docs/agents/git.md`: placeholders that `/sf-setup` replaces with an adapter (tracker `github`, `local` or `hybrid`; git `develop-main` or `main`).
 - `docs/specs/` and `docs/adr/`, each with `_template` and a `README.md` index; `docs/client.md`, `docs/product.md`, `GLOSSARY.md`.
 - `DESIGN.md` (frontend): a placeholder that `sf-new-project` replaces with the chosen design system; `components.json` for shadcn.
-- `.github/workflows/pr-guard.yml` and `.github/pull_request_template.md`.
-- `.claude/settings.json` and `.claude/hooks/check-on-stop.sh`: the Stop hook that refuses to end a turn while `pnpm check` is red.
-- `.dependency-cruiser.cjs`, and a `check` script that is the Definition of Done.
-- The app shell (react-rspack): `package.json` with exact versions, `pnpm-lock.yaml`, the Rspack, Rstest, TypeScript and Biome configs, `src/app/` (providers, router, `modules.ts` registry) and `src/shared/` (HTTP client, env, `cn`, `lib/format.ts` (the only place values are formatted for display), the realtime connection and its fake, shadcn components, and `ui/data-grid/`, the AG Grid wrapper), plus `biome-plugins/` (the lint rule that keeps formatting in `format.ts`). No modules: a project's first module comes from its first spec.
+- `.github/workflows/pr-guard.yml` (branch flow, plus a person's read of changed existing tests and of `factory.json` `loadBearing` paths) and `.github/pull_request_template.md`.
+- `.claude/settings.json` and `.claude/hooks/`: `check-on-stop.sh`, the Stop hook that refuses to end a turn while `pnpm check:fast` is red, and `guard-git.sh`, which blocks merging, force-pushing, pushing to `main`/`develop` and `--no-verify`, and asks before a shell write to a guardrail file. `settings.json` asks before any edit to the guardrails.
+- `.dependency-cruiser.cjs`, and the `check` script that is the Definition of Done, with `check:fast` (Stop hook) and `check:deep` (load-bearing changes).
+- The app shell (react-rspack): `package.json` with exact versions, `pnpm-lock.yaml`, the Rspack, Rstest, TypeScript and Biome configs, `src/app/` (providers, router, `modules.ts` registry) and `src/shared/` (HTTP client, env, `cn`, `lib/format.ts` (the only place values are formatted for display), the realtime connection and its fake, shadcn components, and `ui/data-grid/`, the AG Grid wrapper), plus `biome-plugins/` (the lint rules that keep formatting in `format.ts` and ban snapshots and `fireEvent`), and `src/test/` (the MSW `server`, `renderWithProviders` and `renderHookWithProviders`). Each module's `Provider` builds its store, so tests swap in a fresh cache and the fake socket. No modules: a project's first module comes from its first spec.
 
 Placeholders `sf-new-project` fills: `{{PROJECT_NAME}}`, `{{CLIENT_NAME}}`, `{{PRODUCT_NAME}}`, `{{ONE_SENTENCE_DESCRIPTION}}`.
 

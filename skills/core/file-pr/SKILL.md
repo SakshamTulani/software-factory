@@ -42,7 +42,7 @@ GOOD
 
 > ✅ Every vehicle card re-rendered whenever any vehicle moved, so the panel lagged on large fleets. Each card now re-renders only for its own vehicle.
 
-Write the body into the sections of [`.github/pull_request_template.md`](../../../.github/pull_request_template.md): Summary (with the Ticket and Spec lines), Changes, Screenshots (UI only, else delete), How to test, Backend, Checklist. On the full path, the Spec line names `docs/specs/NNN-slug/` and the `REQ` ids the PR covers. A main PR fills the "Develop PR" line with PR 1's link. Keep the two backend checkbox lines word for word, because `pr-guard.yml` reads them. Never tick "Backend change is live in production" yourself.
+Write the body into the sections of [`.github/pull_request_template.md`](../../../.github/pull_request_template.md): Summary (with the Ticket and Spec lines), Changes, Screenshots (UI only, else delete), How to test, Backend, Checklist. On the full path, the Spec line names `docs/specs/<slug>/` and the requirement ids the PR covers (`<slug>/REQ-<n>`). A main PR fills the "Develop PR" line with PR 1's link. Keep the two backend checkbox lines word for word, because `pr-guard.yml` reads them. Never tick "Backend change is live in production" yourself. Never tick the "Human read" boxes either: say in the PR body which existing tests changed and which load-bearing paths it touches, and leave the ticks to the person who reads them.
 
 Pass `--base <base>` and `--assignee @me` on every `gh pr create`, and `--draft` for a feature branch's main PR. Do not add labels, and do not merge, approve or mark a draft ready; a human does that.
 

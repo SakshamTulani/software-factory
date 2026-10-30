@@ -59,6 +59,34 @@ jobs:
             exit 1
           fi
 
+      # An agent can rewrite a test to match broken code, so a change to an
+      # existing test needs a person's read; new test files don't. Load-bearing
+      # paths come from factory.json on the base branch, so a PR can't drop
+      # its own paths from the list. Ticking a box re-runs this.
+      - name: Changed tests and load-bearing paths read by a person
+        run: |
+          base=$(git merge-base "origin/$BASE" "$HEAD_SHA")
+          fail=0
+          tests=$(git diff --name-only --diff-filter=MDR "$base" "$HEAD_SHA" -- '*.test.ts' '*.test.tsx')
+          if [ -n "$tests" ] && ! grep -Eiq '^\s*- \[x\] A person read the changes to existing tests' <<<"$BODY"; then
+            echo "::error::This PR changes, renames or deletes existing tests. A person must read them, then tick \"A person read the changes to existing tests\". New test files don't need this."
+            echo "$tests"
+            fail=1
+          fi
+          globs=()
+          if [ -f factory.json ]; then
+            while IFS= read -r g; do globs+=(":(glob)$g"); done < <(jq -r '.loadBearing // [] | .[]' factory.json)
+          fi
+          if [ ${#globs[@]} -gt 0 ]; then
+            touched=$(git diff --name-only "$base" "$HEAD_SHA" -- "${globs[@]}")
+            if [ -n "$touched" ] && ! grep -Eiq '^\s*- \[x\] A person read the load-bearing changes' <<<"$BODY"; then
+              echo "::error::This PR touches load-bearing paths (factory.json loadBearing). A person must read them, then tick \"A person read the load-bearing changes\"."
+              echo "$touched"
+              fail=1
+            fi
+          fi
+          exit $fail
+
       # main    <- feat/ fix/ chore/ refactor/ perf/ docs/ hotfix/, revert-*   (never develop)
       # develop <- same, merge/<feature> for conflicts, main for back-merges
       # revert-* is the branch GitHub's Revert button creates.

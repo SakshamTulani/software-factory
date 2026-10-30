@@ -87,6 +87,8 @@ When analyzing test coverage:
 5. Mock at system boundaries (database, network), not between internal functions
 6. Every test name should read like a specification
 7. A test that never fails is as useless as a test that always fails
+8. In this project, follow the `frontend-testing` skill (or the project's testing skill) for helpers, queries and naming, and check new tests with `prove-test.sh` from the `test-driven-development` skill: a test that passes with the change removed proves nothing
+9. Flag every change to an existing test for a person's read; never weaken an assertion to fit the code
 
 ## Composition
 
