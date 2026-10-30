@@ -23,6 +23,8 @@ Multi-dimensional code review with quality gates. Every change gets reviewed bef
 
 Every review evaluates code across these dimensions:
 
+**This project's rules.** If `docs/agents/review.md` exists, apply every rule in it as well. It holds the judgement calls no linter can check, added by `/sf-retro`; mechanical rules belong in `pnpm check` instead.
+
 ### 1. Correctness
 
 Does the code do what it claims to do?

@@ -30,7 +30,7 @@ Before writing any code, operate in read-only mode:
 - Map dependencies between components
 - Note risks and unknowns
 
-**Do NOT write code during planning.** The output is a plan document saved to `docs/specs/NNN-slug/plan.md` beside its spec and a task list recorded in the task list target (see Output Files), not implementation.
+**Do NOT write code during planning.** The output is a plan document saved to `docs/specs/<slug>/plan.md` beside its spec and a task list recorded in the task list target (see Output Files), not implementation.
 
 ### Step 2: Identify the Dependency Graph
 
@@ -142,7 +142,7 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 
 ## Output Files
 
-- **Plan document:** Save the implementation plan to `docs/specs/NNN-slug/plan.md`, beside the approved `spec.md`, from the template in `docs/specs/_template/plan.md`, with `status: draft`. The spec's `status` must be `approved` first; if it isn't, stop. Every task cites the `REQ-NNN` ids it advances. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
+- **Plan document:** Save the implementation plan to `docs/specs/<slug>/plan.md`, beside the approved `spec.md`, from the template in `docs/specs/_template/plan.md`, with `status: draft`. The spec's `status` must be `approved` first; if it isn't, stop. Every task cites the `REQ-<n>` ids it advances. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
 - **Task list:** Record each task in the **task list target** (defined below).
 
 **Never overwrite an incomplete plan.** Before writing `plan.md` or publishing tasks, check whether they already exist and still contain unchecked tasks:

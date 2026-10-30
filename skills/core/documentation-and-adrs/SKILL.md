@@ -45,7 +45,7 @@ If the available evidence conflicts, surface the conflict rather than silently i
 
 ### ADR Template
 
-In this project, store ADRs in `docs/adr/NNNN-slug.md` using `docs/adr/_template.md`, and add a row to `docs/adr/README.md` in the same change. The example below shows the content; the template's headings are the ones to use:
+In this project, store ADRs in `docs/adr/YYYY-MM-DD-<slug>.md` (the date it was proposed) using `docs/adr/_template.md`, and add a row to `docs/adr/README.md` in date order in the same change. This overrides "continue the existing sequence" above: a counter clashes when two branches take the same number, so even a project with older `NNNN-` ADRs names new ones by date. Refer to an ADR by its file name without `.md`. The example below shows the content; the template's headings are the ones to use:
 
 ```markdown
 # ADR-001: Use PostgreSQL for primary database

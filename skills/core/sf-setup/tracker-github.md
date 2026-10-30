@@ -4,8 +4,8 @@ Written by `/sf-setup` (tracker: `github`). Everything lives in this repo's GitH
 
 ## Shape
 
-- **Feature:** one issue per spec, titled `Spec NNN: <name>`, labelled `spec`. The body links `docs/specs/NNN-slug/`.
-- **Task:** one issue per `plan.md` task, as a sub-issue of its feature, titled `NNN.<n> <task>`, labelled `task`. The body has the acceptance criteria and the `REQ` ids.
+- **Feature:** one issue per spec, titled `Spec <slug>: <name>`, labelled `spec`. The body links `docs/specs/<slug>/`.
+- **Task:** one issue per `plan.md` task, as a sub-issue of its feature, titled `<slug> task <n>: <task>`, labelled `task`. The body has the acceptance criteria and the requirement ids, written in full (`<slug>/REQ-<n>`).
 - **Bug / idea:** an issue labelled `bug` or `idea`.
 - `plan.md` stays the ordered source of truth; issues mirror it.
 
@@ -13,8 +13,8 @@ Written by `/sf-setup` (tracker: `github`). Everything lives in this repo's GitH
 
 | A skill says… | Do |
 |---|---|
-| publish the feature | `gh issue create --title "Spec NNN: …" --label spec --body "…"` |
-| publish a task | `gh issue create --parent <feature#> --title "NNN.<n> …" --label task --body "…"` (`gh` 2.94+; older: put `Part of #<feature>` on the first line) |
+| publish the feature | `gh issue create --title "Spec <slug>: …" --label spec --body "…"` |
+| publish a task | `gh issue create --parent <feature#> --title "<slug> task <n>: …" --label task --body "…"` (`gh` 2.94+; older: put `Part of #<feature>` on the first line) |
 | mark blocked | `gh issue edit <task#> --add-blocked-by <other#>`; older `gh`: a `Blocked by: #n` line |
 | fetch the ticket | `gh issue view <n> --json number,title,body,labels,assignees,comments` |
 | claim | `gh issue edit <n> --add-assignee @me`, before any work |

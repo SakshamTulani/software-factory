@@ -14,7 +14,7 @@ python3 .agents/skills/sf-transcribe/transcribe.py $ARGUMENTS
 ```
 
 - **Where it writes:** the folder in `factory.json`'s `conversations.dir` (default `docs/conversations/`). Whether that folder is committed or gitignored was chosen in `sf-setup`.
-- **The name:** `YYYY-MM-DD-<author>-<topic>-<id6>.md`: the session's start date, `git config user.name`, a topic, and the first six characters of the session id. The topic is, first match wins: `--topic`, the branch without its type prefix (`feat/004-command-center` → `004-command-center`), the session's title, then the first words of the first message. If the user describes the session in their request, pass that as `--topic`.
+- **The name:** `YYYY-MM-DD-<author>-<topic>-<id6>.md`: the session's start date, `git config user.name`, a topic, and the first six characters of the session id. The topic is, first match wins: `--topic`, the branch without its type prefix (`feat/command-center` → `command-center`), the session's title, then the first words of the first message. If the user describes the session in their request, pass that as `--topic`.
 - **One file per session:** re-running finds the session's file by its id and rewrites it, keeping the original name.
 - **The index:** `README.md` in the same folder, regenerated every run.
 - **What it renders:** user messages and replies as sections, slash commands by name, loaded skills and tool calls as one-line notes (`--no-tools` drops tool notes). System reminders, tool output, thinking and subagent chatter are left out.

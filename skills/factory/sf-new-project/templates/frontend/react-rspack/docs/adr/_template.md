@@ -5,7 +5,7 @@ deciders:
 superseded-by:
 ---
 
-# NNNN. <Decision, in a short present-tense title>
+# <Decision, in a short present-tense title>
 
 ## Context
 

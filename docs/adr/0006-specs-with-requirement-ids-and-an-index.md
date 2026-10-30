@@ -1,8 +1,8 @@
 ---
-status: accepted
+status: superseded
 date: 2026-10-28
 deciders: sakshamtulani
-superseded-by:
+superseded-by: 0017
 ---
 
 # 0006. Addy's specs, with requirement ids and an index

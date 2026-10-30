@@ -6,8 +6,8 @@ Written by `/sf-setup` (tracker: `hybrid`). Shared work is on GitHub. Each devel
 
 | What | Where | Shared |
 |---|---|---|
-| Feature | One GitHub issue per spec, titled `Spec NNN: <name>`, labelled `spec` | yes |
-| Plan tasks | Checkboxes in `docs/specs/NNN-slug/plan.md` (reviewed and approved like the spec) | yes, committed |
+| Feature | One GitHub issue per spec, titled `Spec <slug>: <name>`, labelled `spec` | yes |
+| Plan tasks | Checkboxes in `docs/specs/<slug>/plan.md` (reviewed and approved like the spec) | yes, committed |
 | Bug / idea | A GitHub issue labelled `bug` or `idea` | yes |
 | Personal chunks | `.scratch/<issue#>-<slug>/NN-chunk.md`, in your own words and as fine-grained as you like | **no**: `.scratch/` is gitignored |
 
@@ -15,7 +15,7 @@ Written by `/sf-setup` (tracker: `hybrid`). Shared work is on GitHub. Each devel
 
 | A skill says… | Do |
 |---|---|
-| publish the feature | `gh issue create --title "Spec NNN: …" --label spec --body "…"`; link the issue in `plan.md` |
+| publish the feature | `gh issue create --title "Spec <slug>: …" --label spec --body "…"`; link the issue in `plan.md` |
 | publish a task | Nothing on GitHub; the `plan.md` checkbox is the task |
 | break a task down (personal) | Write chunk files under `.scratch/<issue#>-<slug>/`. Never commit or push them. |
 | fetch the ticket | `gh issue view <n> --json number,title,body,labels,assignees,comments`, plus the `plan.md` task |

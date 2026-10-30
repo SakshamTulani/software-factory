@@ -134,7 +134,7 @@ def conversations_config(root):
 
 
 def branch_topic(root):
-    # feat/004-command-center -> 004-command-center; main/develop say nothing about the work.
+    # feat/command-center -> command-center; main/develop say nothing about the work.
     branch = git("branch", "--show-current", cwd=root)
     if not branch or branch in ("main", "master", "develop"):
         return None

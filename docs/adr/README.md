@@ -1,6 +1,6 @@
 # Factory decision records
 
-Decisions that shape the factory and every project it generates. Numbered and never edited after acceptance: supersede instead. Format: [the template's ADR template](../../skills/factory/sf-new-project/templates/frontend/react-rspack/docs/adr/_template.md).
+Decisions that shape the factory and every project it generates. Numbered and never edited after acceptance: supersede instead. Format: numbered title, otherwise [the template's ADR template](../../skills/factory/sf-new-project/templates/frontend/react-rspack/docs/adr/_template.md).
 
 | ADR | Status | Decision |
 |---|---|---|
@@ -9,7 +9,7 @@ Decisions that shape the factory and every project it generates. Numbered and ne
 | [0003](0003-tanstack-query-as-the-store-owned-cache.md) | accepted | Frontend stores write REST and WebSocket data into TanStack Query |
 | [0004](0004-data-access-never-imports-business-logic.md) | accepted | Three-tier modules with `types.ts` split from `model.ts`, enforced by dependency-cruiser |
 | [0005](0005-single-agent-tdd-with-test-review.md) | accepted | One agent writes test then code; a test-engineer reviews |
-| [0006](0006-specs-with-requirement-ids-and-an-index.md) | accepted | Addy's spec format plus permanent `REQ-NNN` ids and a specs index |
+| [0006](0006-specs-with-requirement-ids-and-an-index.md) | superseded by 0017 | Addy's spec format plus permanent `REQ-NNN` ids and a specs index |
 | [0007](0007-fork-addy-skills-into-every-project.md) | superseded by 0010 | Addy's skills are forked into the factory and copied into every new project |
 | [0008](0008-design-systems-as-design-md-with-a-forked-shadcn-skill.md) | accepted | Design systems are `DESIGN.md` files chosen at project creation; the shadcn skill is forked and pinned |
 | [0009](0009-develop-main-git-flow-as-the-default.md) | accepted | The develop + draft-main flow is the default git strategy |
@@ -20,3 +20,5 @@ Decisions that shape the factory and every project it generates. Numbered and ne
 | [0014](0014-skill-groups-rstest-and-the-intellicar-theme.md) | accepted | Skills grouped core/frontend/backend/factory; tests on Rstest; rstack and Vercel frontend skills forked; the Intellicar theme with AA-checked colours |
 | [0015](0015-ag-grid-through-one-wrapper.md) | accepted | AG Grid Community 36 only through `DataGrid` in `src/shared/ui/data-grid`; Enterprise banned; depcruise no longer hides packages that ship from `dist/` |
 | [0016](0016-one-format-module-for-displayed-values.md) | accepted | Dates, times, durations and numbers are formatted only in `src/shared/lib/format.ts`, enforced by dependency-cruiser and a Biome rule |
+| [0017](0017-named-specs-and-dated-adrs.md) | accepted | Specs named by slug (`docs/specs/<slug>/`, `feat/<slug>`), `REQ-<n>` per spec cited as `<slug>/REQ-<n>`, project ADRs named by date; no shared counters |
+| [0018](0018-sf-retro-from-matt-pocock.md) | accepted | `/sf-retro`, forked from Matt Pocock's `retro`, proposes environment fixes and drafts sf-factory issues for factory ones |

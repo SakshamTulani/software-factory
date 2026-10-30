@@ -147,7 +147,7 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 [Anything unresolved that needs human input]
 ```
 
-**Where specs live in this project.** Save each spec to `docs/specs/NNN-slug/spec.md`: take the next free `NNN`, use a short slug describing the capability, and fill in `docs/specs/_template/spec.md` with `status: draft`. Number every success criterion `REQ-NNN`; ids are permanent once approved, so supersede a requirement rather than renumber it. Add the spec and its requirements to `docs/specs/README.md` in the same change. Only a human sets `status: approved`.
+**Where specs live in this project.** Save each spec to `docs/specs/<slug>/spec.md`, where the slug is a short kebab-case name for the capability (`command-center`) and is never a number, so specs started on parallel branches can't collide. If the folder already exists, or another branch already claims `feat/<slug>` on the remote, pick another slug. Claim it by pushing the empty `feat/<slug>` branch before writing the spec (`sf-spec` has the commands). Fill in `docs/specs/_template/spec.md` with `status: draft`. Number every success criterion `REQ-1`, `REQ-2` … within the spec; outside the spec's folder, cite it as `<slug>/REQ-<n>`. Ids are permanent once approved, so supersede a requirement rather than renumber it. Add a row for the spec to `docs/specs/README.md`, in alphabetical order, in the same change. Specs from before this convention keep their `NNN-slug` folders and `REQ-NNN` ids. For a migration, the spec names its oracle: what proves the new code behaves like the old, since green tests alone don't. Only a human sets `status: approved`.
 
 **External spec tools:** This workflow is format-agnostic. If the project
 already uses OpenSpec or another specification system, keep that system's
@@ -187,7 +187,7 @@ With the validated spec, generate a technical implementation plan:
 
 > Follow `planning-and-task-breakdown` for the dependency-graph mapping and vertical-slicing mechanics behind these steps; it is the canonical source. The bullets above are a lightweight summary; if they ever diverge, `planning-and-task-breakdown` takes precedence.
 >
-> **Output convention:** Save the plan to `docs/specs/NNN-slug/plan.md` beside the spec, and publish the tasks to the tracker defined in `docs/agents/issue-tracker.md`. Downstream commands (`/sf-build`, etc.) expect this layout.
+> **Output convention:** Save the plan to `docs/specs/<slug>/plan.md` beside the spec, and publish the tasks to the tracker defined in `docs/agents/issue-tracker.md`. Downstream commands (`/sf-build`, etc.) expect this layout.
 
 The plan should be reviewable: the human should be able to read it and say "yes, that's the right approach" or "no, change X."
 

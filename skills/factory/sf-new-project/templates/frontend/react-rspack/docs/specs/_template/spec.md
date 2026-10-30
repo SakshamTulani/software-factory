@@ -1,11 +1,11 @@
 ---
-spec: NNN-slug
+spec: <slug>
 status: draft          # draft | approved | superseded
 approved-by:
 approved-on:
 ---
 
-# Spec NNN: <Feature name>
+# Spec: <Feature name>
 
 ## Objective
 
@@ -17,10 +17,10 @@ What this spec takes as given. Each one is something a reviewer can correct.
 
 ## Requirements
 
-Ids are permanent. Tasks cite them and tests are named after them. Once approved, supersede a requirement; never renumber it.
+Ids are permanent and local to this spec. Tasks cite them; tests and other docs cite them as `<slug>/REQ-<n>`. Once approved, supersede a requirement; never renumber it.
 
-- **REQ-001**: <testable criterion. "When <trigger>, the <screen/module> shall <observable response>" where that reads naturally.>
-- **REQ-002**: …
+- **REQ-1**: <testable criterion. "When <trigger>, the <screen/module> shall <observable response>" where that reads naturally.>
+- **REQ-2**: …
 
 ## Modules touched
 
@@ -35,6 +35,10 @@ Which modules in `src/modules/` change, and any new module. Which REST endpoints
 ## Out of scope
 
 What this spec deliberately does not do.
+
+## Migration oracle
+
+Migrations only; delete otherwise. What proves the new code behaves like the old: recorded responses, a side-by-side run, a list of screens compared by a person. Green tests alone don't, because the old code is often barely tested.
 
 ## Open questions
 

@@ -4,7 +4,7 @@ Written by `/sf-setup` (tracker: `local`). Everything lives in this repo as comm
 
 ## Shape
 
-- **Feature and tasks:** the spec folder is the issue. Tasks are the checkboxes in `docs/specs/NNN-slug/plan.md`.
+- **Feature and tasks:** the spec folder is the issue. Tasks are the checkboxes in `docs/specs/<slug>/plan.md`.
 - **Bug / idea:** one file per item at `.scratch/issues/NN-slug.md`, numbered from `01`. Its first lines are `Type: bug|idea` and `Status: open|claimed|done`; comments go under a `## Comments` heading at the bottom.
 - `.scratch/` is committed in this mode, so the team shares it.
 
