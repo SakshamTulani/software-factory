@@ -21,7 +21,7 @@ Enforced by `.github/workflows/pr-guard.yml` (check `pr-guard-flow`) and `.githu
 |---|---|---|---|
 | `main` | — | — | Production |
 | `develop` | `main` | nothing | Test environment. Merge commits only. |
-| `feat/<NNN-slug>` | `main` | `develop`, then `main` at release | Full-path work: one branch per spec, e.g. `feat/004-command-center` |
+| `feat/<slug>` | `main` | `develop`, then `main` at release | Full-path work: one branch per spec, named after its folder, e.g. `feat/command-center`, pushed as soon as the slug is chosen to claim it |
 | `fix/` `chore/` `refactor/` `perf/` `docs/` | `main` | `develop`, then `main` at release | Light-path work |
 | `hotfix/<slug>` | `main` | `main`, plus a PR into `develop` | Production fix |
 | `merge/<feature>` | the feature branch | `develop` | Resolving develop conflicts without touching the feature |
@@ -33,9 +33,9 @@ Enforced by `.github/workflows/pr-guard.yml` (check `pr-guard-flow`) and `.githu
 
 ```sh
 git fetch origin
-git switch -c feat/004-command-center --no-track origin/main
+git switch -c feat/command-center --no-track origin/main
 # ...commit...
-git push -u origin feat/004-command-center
+git push -u origin feat/command-center
 gh pr create --base develop --fill            # PR 1, merged now
 gh pr create --base main --draft --fill       # PR 2, merged at release
 ```
@@ -45,12 +45,12 @@ More fixes after testing: push to the same branch and merge PR 1 again. At relea
 **Develop PR has conflicts.** Don't click "Update branch" or "Resolve conflicts" on GitHub; both pull `develop` into the feature.
 
 ```sh
-git switch -c merge/004-command-center feat/004-command-center
+git switch -c merge/command-center feat/command-center
 git merge origin/develop     # resolve, commit
-git push -u origin merge/004-command-center
+git push -u origin merge/command-center
 ```
 
-Close PR 1 and open `merge/004-command-center → develop`. The feature branch and PR 2 stay clean.
+Close PR 1 and open `merge/command-center → develop`. The feature branch and PR 2 stay clean.
 
 **Develop was pulled in by mistake.** `pr-guard-flow` names the merge that did it. Reset to the commit before it, merge `main` again and force-push:
 
@@ -86,7 +86,7 @@ Format: `type(scope): summary`
 - `scope`: optional, lowercase, the module (`command-center`, `live-tracking`).
 - `summary`: imperative, lowercase start, no trailing period, under 72 characters. Say why it matters: `fix(trip-report): stop CSV export dropping the last row`, not `fix(trip-report): update export util`.
 - Body only when the reason isn't obvious from the subject. No file lists.
-- On the full path, add the trailers `Spec: NNN-slug` and `Task: <n>`.
+- On the full path, add the trailers `Spec: <slug>` and `Task: <n>`.
 
 ## Pull requests
 
@@ -102,6 +102,8 @@ Open them with the `file-pr` skill. Title: the commit format; other titles fail 
 | `Merge this branch's develop PR first` | Merge PR 1 into `develop`, then re-run the check. Drafts skip this check. |
 | `Open a PR from … into develop as well` | Open the hotfix's develop PR. The main PR's check re-runs by itself. |
 | `This PR needs a backend change` | Tick "Backend change is live in production" once it is released. |
+| `This PR changes, renames or deletes existing tests` | A person reads each listed test change, then ticks "A person read the changes to existing tests". Agents never tick it. |
+| `This PR touches load-bearing paths` | A person reads the listed files, then ticks "A person read the load-bearing changes". Agents never tick it. |
 
 ## Releases
 
@@ -110,5 +112,5 @@ At release, mark each feature's main PR ready and merge it. Then tag `main`: `gi
 ## Repository settings (set by a human)
 
 - `develop`: merge commits only. The guard relies on them.
-- `main` and `develop`: require a PR, one approving review, and the `pr-guard-flow` and `pnpm check` checks. Block force-pushes.
+- `main` and `develop`: require a PR, one approving review, and the `pr-guard-flow` and `check` (CI) checks. Block force-pushes.
 - `back-merge.yml` needs the org's `INTELLICARS_BOT_APP_ID` variable and `INTELLICARS_BOT_PRIVATE_KEY` secret, and the label `main to develop sync`.

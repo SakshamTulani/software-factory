@@ -17,6 +17,14 @@ Ship with confidence. The goal is not just to deploy — it's to deploy safely, 
 - Opening a beta or early access program
 - Any deployment that carries risk (all of them)
 
+## This project
+
+These override the generic guidance below wherever they differ.
+
+- **Releasing is `docs/agents/git.md`'s Releases section.** Under `develop-main`, a feature ships when a person marks its draft PR into `main` ready and merges it, after it was tested on develop and any backend it needs is live ("Backend change is live in production" ticked). Agents never mark a main PR ready or merge it.
+- **Before release:** `pnpm check:deep` is green (check, build, `pnpm audit`), every PR in the release has its human-read boxes ticked where `pr-guard.yml` asked, and `/sf-review` ran on each.
+- `/sf-ship` runs this checklist through the `code-reviewer`, `security-auditor` and `test-engineer` agents.
+
 ## The Pre-Launch Checklist
 
 ### Code Quality

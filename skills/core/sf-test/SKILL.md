@@ -19,3 +19,5 @@ For bug fixes (Prove-It pattern):
 5. Run the full test suite for regressions
 
 For browser-related issues, also invoke browser-testing-with-devtools to verify with Chrome DevTools MCP.
+
+In this project, write the tests as the project's testing skill says (`frontend-testing`). This is the light path's step for a bug fix or refactor; never edit an existing test to make it pass. After committing, prove the new test with `prove-test.sh` (`test-driven-development`), then run `/sf-review`.

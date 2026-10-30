@@ -11,6 +11,8 @@ Agent Skills is a collection of engineering workflow skills organized by develop
 
 ## Skill Discovery
 
+**In this project, start with `project-workflow`.** It decides whether a change takes the full path (`/sf-spec` → `/sf-plan` → `/sf-build` → `/sf-review` → `file-pr` → `/sf-ship`) or the light one, and where every artifact lives. For code under `src/`, `frontend-architecture` is the rule; for tests, `frontend-testing`.
+
 When a task arrives, identify the development phase and apply the corresponding skill:
 
 ```
@@ -21,7 +23,7 @@ Task arrives
     ├── New project/feature/change? ──→ spec-driven-development
     ├── No quality bar written down? ──→ constraint-driven-development
     ├── Have a spec, need tasks? ──────→ planning-and-task-breakdown
-    ├── Implementing code? ────────────→ incremental-implementation
+    ├── Implementing code? ────────────→ incremental-implementation + frontend-architecture
     │   ├── UI work? ─────────────────→ frontend-ui-engineering (reads DESIGN.md)
     │   │   ├── Components / shadcn? ─→ shadcn
     │   │   ├── Tables / data grids? ──→ ag-grid
@@ -33,7 +35,7 @@ Task arrives
     │   ├── Need better context? ─────→ context-engineering
     │   ├── Need doc-verified code? ───→ source-driven-development
     │   └── Stakes high / unfamiliar code? ──→ doubt-driven-development
-    ├── Writing/running tests? ────────→ test-driven-development
+    ├── Writing/running tests? ────────→ test-driven-development + frontend-testing
     │   ├── Rstest setup or failures? ─→ rstest-best-practices, rstest-debugging
     │   └── Browser-based? ───────────→ browser-testing-with-devtools
     ├── Something broke? ──────────────→ debugging-and-error-recovery
@@ -46,7 +48,8 @@ Task arrives
     ├── Deprecating/migrating? ────────→ deprecation-and-migration (backend projects)
     ├── Writing docs/ADRs? ───────────→ documentation-and-adrs
     ├── Adding logs/metrics/alerts? ───→ observability-and-instrumentation (backend projects)
-    └── Deploying/launching? ─────────→ shipping-and-launch
+    ├── Deploying/launching? ─────────→ shipping-and-launch
+    └── Session went badly? ───────────→ suggest the user runs /sf-retro
 ```
 
 ## Core Operating Behaviors
@@ -157,14 +160,14 @@ For a complete feature, the typical skill sequence is:
 5.  context-engineering         → Load the right context
 6.  source-driven-development   → Verify against official docs
 7.  incremental-implementation  → Build slice by slice
-8.  observability-and-instrumentation → Instrument as you build (runs parallel with 7-9, not after)
+8.  observability-and-instrumentation → Instrument as you build (backend projects; runs parallel with 7-9, not after)
 9.  doubt-driven-development    → Cross-examine non-trivial decisions in-flight
 10. test-driven-development     → Prove each slice works
 11. code-review-and-quality     → Review before merge
 12. code-simplification         → Reduce unnecessary complexity while preserving behavior
 13. git-workflow-and-versioning → Clean commit history
 14. documentation-and-adrs      → Document decisions
-15. deprecation-and-migration   → Retire old systems and move users safely when needed
+15. deprecation-and-migration   → Retire old systems and move users safely when needed (backend projects)
 16. shipping-and-launch         → Deploy safely
 ```
 
@@ -183,7 +186,7 @@ Not every task needs every skill. A bug fix might only need: `debugging-and-erro
 | Build | doubt-driven-development | Adversarial fresh-context review of every non-trivial decision |
 | Build | context-engineering | Right context at the right time |
 | Build | frontend-ui-engineering | Production-quality UI with accessibility |
-| Build | api-and-interface-design | Stable interfaces with clear contracts |
+| Build | api-and-interface-design | Stable interfaces with clear contracts (backend projects) |
 | Verify | test-driven-development | Failing test first, then make it pass |
 | Verify | browser-testing-with-devtools | Chrome DevTools MCP for runtime verification |
 | Verify | debugging-and-error-recovery | Reproduce → localize → fix → guard |
@@ -193,7 +196,7 @@ Not every task needs every skill. A bug fix might only need: `debugging-and-erro
 | Review | performance-optimization | Measure first, optimize only what matters |
 | Ship | git-workflow-and-versioning | Atomic commits, clean history |
 | Ship | ci-cd-and-automation | Automated quality gates on every change |
-| Ship | deprecation-and-migration | Remove old systems and migrate users safely |
+| Ship | deprecation-and-migration | Remove old systems and migrate users safely (backend projects) |
 | Ship | documentation-and-adrs | Document the why, not just the what |
-| Ship | observability-and-instrumentation | Structured logs, RED metrics, traces, symptom-based alerts |
+| Ship | observability-and-instrumentation | Structured logs, RED metrics, traces, symptom-based alerts (backend projects) |
 | Ship | shipping-and-launch | Pre-launch checklist, monitoring, rollback plan |

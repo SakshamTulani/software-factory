@@ -13,6 +13,16 @@ Git is your safety net. Treat commits as save points, branches as sandboxes, and
 
 Always. Every code change flows through git.
 
+## This project
+
+These override the generic guidance below wherever they differ.
+
+- **`docs/agents/git.md` is the source of truth** for branches, bases, PRs and releases (`develop-main` or `main`, chosen by `sf-setup`). Not trunk-based.
+- **Branch prefixes are `feat/`, `fix/`, `chore/`, `refactor/`, `perf/`, `docs/`, `hotfix/`** (and `merge/` for develop conflicts). `pr-guard.yml` rejects any other, including `feature/`. A full-path branch is `feat/<slug>`, named after its spec and pushed at once to claim it.
+- **Commits** are `type(scope): summary`, with the trailers `Spec: <slug>` and `Task: <n>` on the full path. Never `--no-verify`: the pre-commit hook is a check.
+- **Agents never merge, approve, push to `main` or `develop`, or force-push without `--force-with-lease`.** `.claude/hooks/guard-git.sh` blocks these. Open PRs with `file-pr`.
+- **Releases** follow `docs/agents/git.md`'s Releases section, not the semver section below.
+
 ## Core Principles
 
 ### Trunk-Based Development (Recommended)

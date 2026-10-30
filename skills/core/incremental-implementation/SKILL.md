@@ -9,6 +9,10 @@ description: Delivers changes incrementally in thin, verifiable slices. Use when
 
 Build in thin vertical slices — implement one piece, test it, verify it, then expand. Avoid implementing an entire feature in one pass. Each increment should leave the system in a working, testable state. This is the execution discipline that makes large features manageable.
 
+## This project
+
+`/sf-build` runs this skill one plan task at a time. A slice is a plan task: it starts with a failing test (`test-driven-development`, `frontend-testing`), ends with `pnpm check` green, and is one commit with the trailers `Spec: <slug>` and `Task: <n>`. The first slice after scaffolding is the plan's tracer bullet. Follow `frontend-architecture` for where code goes.
+
 ## When to Use
 
 - Implementing any multi-file change

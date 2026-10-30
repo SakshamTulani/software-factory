@@ -18,18 +18,24 @@ Most of `skills/` is forked from other repos and adapted. Projects install it fr
 | all | `agent-skills:<skill>` → `<skill>`; command invocations `/spec` … `/webperf` → `/sf-spec` … `/sf-webperf`, `/code-simplify` → `/sf-simplify`, to avoid clashing with Claude Code's built-in commands |
 | all | `../../references/<file>` → `../engineering-checklists/<file>`, because each skill installs as its own folder |
 | `sf-*` (were commands) | `name` and `disable-model-invocation: true` added to the front matter |
-| `sf-spec` | writes `docs/specs/NNN-slug/spec.md` from the template, with `REQ-NNN` ids and an index row; stops at the approval gate |
-| `sf-plan` | requires an approved spec; writes `plan.md` beside it; publishes tasks through `docs/agents/issue-tracker.md`; task 1 of a new module is `/sf-new-module` |
-| `sf-build` | finds the plan under `docs/specs/`; both gates required, also in `auto`; runs `/sf-new-module` when a task names it; `pnpm check` is the verification; `Spec:`/`Task:` trailers |
-| `spec-driven-development` | spec location, `REQ-NNN` ids, index, human-only approval |
+| `sf-spec` | writes `docs/specs/<slug>/spec.md` from the template, with per-spec `REQ-<n>` ids and an alphabetical index row ([ADR 0017](adr/0017-named-specs-and-dated-adrs.md)); stops at the approval gate |
+| `sf-plan` | requires an approved spec, asks when several have no plan; tracer-bullet task, test list, three least-confident decisions, `critic` on load-bearing plans; writes `plan.md` beside it; publishes tasks through `docs/agents/issue-tracker.md`; task 1 of a new module is `/sf-new-module` |
+| `sf-build` | finds the plan under `docs/specs/`; both gates required, also in `auto`; runs `/sf-new-module` when a task names it; `pnpm check` is the verification; `Spec:`/`Task:` trailers; `auto` also stops on red twice, over 400 lines, an unplanned load-bearing path or a changed existing test ([ADR 0020](adr/0020-trust-controls-from-addy-osmanis-factory.md)) |
+| `spec-driven-development` | spec location by slug, per-spec `REQ-<n>` ids cited as `<slug>/REQ-<n>`, index, human-only approval |
 | `planning-and-task-breakdown` | plan beside the spec; tasks go to the tracker the project defines instead of `tasks/todo.md` |
-| `documentation-and-adrs` | ADRs in `docs/adr/` with the project's template and index |
-| `test-driven-development` | points to the project's testing skill; tests named after `REQ` ids |
+| `documentation-and-adrs` | ADRs in `docs/adr/YYYY-MM-DD-<slug>.md` with the project's template and index; overrides "continue the existing sequence" |
+| `test-driven-development` | points to the project's testing skill; tests named after `<slug>/REQ-<n>` ids; `prove-test.sh` (from addyosmani/factory, below) and never editing an existing test to pass |
 | `frontend-ui-engineering` | "This project" section: `DESIGN.md` wins, components via `shadcn`, module `ui/` layout from `frontend-architecture`, `composition-patterns` and `react-best-practices` for components, done only after `DESIGN.md`'s checklist and a `web-design-guidelines` review |
-| `using-agent-skills` | router branches for `shadcn`, `composition-patterns`, `react-best-practices`, `web-design-guidelines`, `rspack-*` and `rstest-*`; backend-only skills marked "(backend projects)" |
-| `code-review-and-quality` | Architecture axis checks `DESIGN.md`, `web-design-guidelines` and shared-component restyling |
+| `using-agent-skills` | starts from `project-workflow`; `frontend-architecture` and `frontend-testing` beside implementing and testing; backend-only skills marked; router branch suggesting `/sf-retro` after a bad session; router branches for `shadcn`, `composition-patterns`, `react-best-practices`, `web-design-guidelines`, `rspack-*` and `rstest-*`; backend-only skills marked "(backend projects)" |
+| `code-review-and-quality` | applies `docs/agents/review.md` when it exists; Architecture axis checks `DESIGN.md`, `web-design-guidelines` and shared-component restyling |
 | `engineering-checklists` | new `SKILL.md` indexing the reference files |
-| agents | links to upstream's `docs/agents.md` (not taken) point to `engineering-checklists/orchestration-patterns.md` |
+| agents | links to upstream's `docs/agents.md` (not taken) point to `engineering-checklists/orchestration-patterns.md`; `code-reviewer` reads the diff cold, re-runs checks and treats a failed test proof or weakened test as Critical, and is spawned by `/sf-review`; `test-engineer` follows the project's testing skill and `prove-test.sh` |
+| `git-workflow-and-versioning`, `shipping-and-launch`, `ci-cd-and-automation`, `incremental-implementation`, `debugging-and-error-recovery`, `constraint-driven-development` | a "This project" section that overrides the generic text: `docs/agents/git.md` and its branch prefixes (not trunk-based, not `feature/`), releases through the main PR, the template's CI and `pr-guard`, a slice is a plan task with `pnpm check` and trailers, Rstest commands, and the existing `check:fast`/`check`/`check:deep` scripts |
+| `sf-constraints` | adds checks to the existing scripts by cost instead of `check:task`/`check:full`; points agents at `CONSTRAINTS.md` from `AGENTS.md`, not `CLAUDE.md` |
+| `sf-ship` | runs on a release candidate; `pnpm check:deep` and outstanding PR boxes are blockers; personas are the project's `.claude/agents/` |
+| `sf-test` | the light path's step: tests per the project's testing skill, never editing an existing test, `prove-test.sh` then `/sf-review` |
+| `sf-review` | spawns `code-reviewer` with a fresh context as verifier (checks re-run, `prove-test.sh`, changed tests), and `critic` on load-bearing changes; was a single in-session review |
+| `sf-spec` | slug claimed by pushing `feat/<slug>` first; `critic` on specs that touch load-bearing paths |
 
 ## rstackjs/agent-skills
 
@@ -66,6 +72,32 @@ Neither skill is installed: both are built to choose a style for marketing sites
 
 - Every CLI call pinned to `pnpm dlx shadcn@4.23.0` (the CLI version at that commit) instead of `@latest`.
 - Added a "This project" section: `DESIGN.md`, `src/shared/ui/`.
+
+## mattpocock/skills
+
+`skills/core/sf-retro` from `skills/engineering/retro` at `a496f5513d4a4cf889bc48e189e579f4b0bdf6aa` (2026-10-30), MIT (`LICENSE.txt` copied). Rewritten for this stack ([ADR 0018](adr/0018-sf-retro-from-matt-pocock.md)):
+
+- Renamed `sf-retro`. The `writing-for-agents` step is removed (not shipped).
+- Reads `sf-transcribe`'s conversation log as well as the current session.
+- Categories point at `pnpm check` (Biome, GritQL plugins, dependency-cruiser), `docs/agents/review.md` instead of `CODING_STANDARDS.md`, and `CONSTRAINTS.md`.
+- New category: a factory skill at fault becomes a drafted issue on `SakshamTulani/sf-factory`, filed with `gh` only on a yes.
+- Applies the fixes the user picks, and verifies a new check fails on the original mistake.
+
+Not taken: the rest of the repo (its lifecycle overlaps Addy's), `agents/openai.yaml`.
+
+## addyosmani/factory
+
+From `8af116567166a0a16588b7ab1b9934ece0b775bc` (2026-08-18), MIT (`docs/licenses/addyosmani-factory.txt`; a `LICENSE-factory.txt` beside each forked file). Controls taken, orchestration left out ([ADR 0020](adr/0020-trust-controls-from-addy-osmanis-factory.md)).
+
+| Ours | From | Changes |
+|---|---|---|
+| `skills/core/test-driven-development/prove-test.sh` | `template/.factory/scripts/prove-test.sh` | Header; the empty `test_paths` loop guarded so it runs under `set -u` in macOS bash 3.2 |
+| `skills/factory/sf-new-project/common/.claude/agents/critic.md` | `template/.claude/agents/factory-critic.md` | Renamed `critic`; points at our `code-reviewer` and `/sf-review` instead of the factory verifier; no `WebFetch` |
+| the template's `.claude/hooks/guard-git.sh` | `template/.claude/hooks/block-merge.sh` | Allows `--force-with-lease` and merges off `main`/`develop` (our recipes use both); blocks merge, rebase and reset on them, refspec pushes into them and `--no-verify`; asks, rather than blocks, before shell writes to our guardrail files |
+
+Ideas taken without code: the human read of changed tests (`TESTS_ARE_LOAD_BEARING`) and of load-bearing paths, enforced in `pr-guard.yml`; `settings.json` rules on guardrail files (as `ask`, not `deny`); the spec gates' "three decisions you're least confident about", test list, tracer-bullet slice and migration oracle; `STOP_IF` limits in `/sf-build auto`; fast, full and deep gate levels; `factory-tune` as `/sf-retro 30d`; claiming work by pushing its branch.
+
+Not taken: the charter and autonomy tiers, the GitHub-label queue, triage, run records, review back-pressure, the scheduled monitor and the Codex adapter.
 
 ## Intellicar conventions
 

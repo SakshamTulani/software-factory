@@ -15,6 +15,15 @@ The reason matters. When you wrote the code, reading it told you whether it was 
 
 Spec-driven development says what to build. Test-driven development proves it works. Constraint-driven development defines what "good enough to ship" means, before anyone argues about it in a pull request.
 
+## This project
+
+These override the generic guidance below wherever they differ.
+
+- **The floor already exists.** `pnpm check` (types, Biome, dependency-cruiser, Rstest) is the Definition of Done; the Stop hook runs `pnpm check:fast` after every turn; `pnpm check:deep` adds the build and `pnpm audit`; `pr-guard.yml` requires a person's read of changed tests and load-bearing paths; `prove-test.sh` checks new tests fail without their change. `CONSTRAINTS.md` records the numbers and any dimension beyond these.
+- **Extend the existing scripts; don't add new names.** A seconds-level check joins `check:fast`, a task-end check joins `check`, a slow or review-time one joins `check:deep`. Where this skill says `check:task` / `check:full`, read `check` / `check:deep`.
+- **Point agents at it from `AGENTS.md`'s Rules**, not `CLAUDE.md`, which only imports `AGENTS.md`. Editing `AGENTS.md`, `CONSTRAINTS.md` or a check's config asks the user first.
+- **Review the bar monthly** with `/sf-retro 30d`, and record each tighten or loosen with its evidence in `CONSTRAINTS.md`.
+
 ## When to Use
 
 Apply this skill when:

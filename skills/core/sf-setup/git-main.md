@@ -11,7 +11,7 @@ Enforced by `.github/workflows/pr-guard.yml` (check `pr-guard-flow`): PR title f
 | Branch | Cut from | PR into | For |
 |---|---|---|---|
 | `main` | — | — | Production; every merge must be releasable |
-| `feat/<NNN-slug>` | `main` | `main` | Full-path work: one branch per spec, e.g. `feat/004-command-center` |
+| `feat/<slug>` | `main` | `main` | Full-path work: one branch per spec, named after its folder, e.g. `feat/command-center`, pushed as soon as the slug is chosen to claim it |
 | `fix/<slug>` `refactor/<slug>` `perf/<slug>` `chore/<slug>` `docs/<slug>` | `main` | `main` | Light-path work |
 | `hotfix/<slug>` | `main` | `main` | Production fix that can't wait for the next release |
 
@@ -27,11 +27,20 @@ Format: `type(scope): summary`
 - `scope`: optional, lowercase, the module (`command-center`, `live-tracking`).
 - `summary`: imperative, lowercase start, no trailing period, under 72 characters. Say why it matters: `fix(trip-report): stop CSV export dropping the last row`, not `fix(trip-report): update export util`.
 - Body only when the reason isn't obvious from the subject. No file lists.
-- On the full path, add the trailers `Spec: NNN-slug` and `Task: <n>`.
+- On the full path, add the trailers `Spec: <slug>` and `Task: <n>`.
 
 ## Pull requests
 
 Open them with the `file-pr` skill. Base: `main`. Title: the commit format. Body: [the PR template](../../.github/pull_request_template.md), leading with the problem. A human reviews, approves and merges; agents never merge or approve.
+
+## When a PR check fails
+
+| Error starts with | Fix |
+|---|---|
+| `… cannot merge into …` | Wrong source for this base. Rename the branch with an allowed prefix (GitHub's rename keeps open PRs). |
+| `Title should look like` | Edit the title to `type(scope): summary`. |
+| `This PR changes, renames or deletes existing tests` | A person reads each listed test change, then ticks "A person read the changes to existing tests". Agents never tick it. |
+| `This PR touches load-bearing paths` | A person reads the listed files, then ticks "A person read the load-bearing changes". Agents never tick it. |
 
 ## Releases
 
@@ -39,4 +48,4 @@ Tag `main` with semver: `git tag v1.4.0 origin/main && git push origin v1.4.0`. 
 
 ## Recommended branch protection
 
-On `main`: require a PR, one approving review, and the `pr-guard-flow` and `pnpm check` checks. Block force-pushes.
+On `main`: require a PR, one approving review, and the `pr-guard-flow` and `check` (CI) checks. Block force-pushes.

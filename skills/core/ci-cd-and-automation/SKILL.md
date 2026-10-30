@@ -13,6 +13,10 @@ Automate quality gates so that no change reaches production without passing test
 
 **Faster is Safer:** Smaller batches and more frequent releases reduce risk, not increase it. A deployment with 3 changes is easier to debug than one with 30. Frequent releases build confidence in the release process itself.
 
+## This project
+
+The template already ships CI: `.github/workflows/ci.yml` runs `pnpm check` and `pnpm build` on every PR (job `check`), and `pr-guard.yml` enforces the branch flow and the human reads of changed tests and load-bearing paths. Extend these rather than adding parallel pipelines. Workflows are load-bearing (`factory.json`), so a change to them asks the user and needs a person's read on the PR.
+
 ## When to Use
 
 - Setting up a new project's CI pipeline

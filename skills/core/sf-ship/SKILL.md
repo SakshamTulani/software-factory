@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 Invoke the shipping-and-launch skill.
 
+Run it on a release candidate: under `develop-main`, the features whose draft PRs into `main` are about to be marked ready, after they were tested on develop. It decides go or no-go; a person releases, as `docs/agents/git.md` says. Before the fan-out, run `pnpm check:deep` yourself and list any PR in the release whose "Human read" boxes or "Backend change is live in production" box `pr-guard.yml` still wants ticked: each one is a blocker.
+
 `/sf-ship` is a **fan-out orchestrator**. It runs three specialist personas in parallel against the current change, then merges their reports into a single go/no-go decision with a rollback plan. The personas operate independently — no shared state, no ordering — which is what makes parallel execution safe and useful here.
 
 ## Phase A — Parallel fan-out
@@ -25,7 +27,7 @@ Constraints (from Claude Code's subagent model):
 - Each subagent gets its own context window and returns only its report to this main session.
 - If you need teammates that talk to each other instead of just reporting back, use Claude Code Agent Teams and reference these personas as teammate types (see `../engineering-checklists/orchestration-patterns.md`).
 
-**Persona resolution.** If you've defined your own `code-reviewer`, `security-auditor`, or `test-engineer` in `.claude/agents/` or `~/.claude/agents/`, those take precedence over this plugin's versions — `/sf-ship` picks up your customizations automatically. This is intentional: plugin subagents sit at the bottom of Claude Code's scope priority table, so user-level definitions win by design.
+**Persona resolution.** The personas are the project's own `.claude/agents/*.md`, copied in by `sf-new-project`. Edit them there to customise them for this project.
 
 ## Phase B — Merge in main context
 

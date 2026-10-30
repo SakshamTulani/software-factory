@@ -9,6 +9,10 @@ description: Guides systematic root-cause debugging. Use when tests fail, builds
 
 Systematic debugging with structured triage. When something breaks, stop adding features, preserve evidence, and follow a structured process to find and fix the root cause. Guessing wastes time. The triage checklist works for test failures, build errors, runtime bugs, and production incidents.
 
+## This project
+
+The commands below are generic. Here: `pnpm test` (Rstest), `pnpm exec rstest <path> -t "<name>"` for one test, `pnpm check` for everything. For a test that won't start, hangs or is slow, use `rstest-debugging`; for build problems, `rspack-best-practices`. A bug fix starts with a failing test that reproduces it, and never edits an existing test to pass.
+
 ## When to Use
 
 - Tests fail after a code change
