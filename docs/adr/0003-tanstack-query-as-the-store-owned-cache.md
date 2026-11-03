@@ -1,8 +1,8 @@
 ---
-status: accepted
+status: superseded
 date: 2026-10-28
 deciders: sakshamtulani
-superseded-by:
+superseded-by: 0024
 ---
 
 # 0003. Frontend stores write into TanStack Query

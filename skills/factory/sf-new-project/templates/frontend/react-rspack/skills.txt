@@ -52,6 +52,7 @@ rspack-split-chunks
 rstest-best-practices
 rstest-debugging
 sf-new-module
+sf-new-store
 sf-webperf
 shadcn
 web-design-guidelines

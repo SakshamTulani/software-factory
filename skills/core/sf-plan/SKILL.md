@@ -13,7 +13,7 @@ Read the spec, the project's architecture skill (`frontend-architecture` for fro
 1. Enter plan mode — read only, no code changes
 2. Identify the dependency graph between components
 3. Slice work vertically (one complete path per task, not horizontal layers)
-4. Write tasks with acceptance criteria, verification steps and the `REQ-<n>` ids they advance. If the spec adds a module, task 1 is "Run `/sf-new-module <name>`". The next task is a tracer bullet: the thinnest end-to-end path, with fake data, proving the shape works. Keep each task under 400 changed lines, and name any `factory.json` `loadBearing` path a task must change
+4. Write tasks with acceptance criteria, verification steps and the `REQ-<n>` ids they advance. If the spec adds a backend domain no store covers, task 1 is "Run `/sf-new-store <name>`"; if it adds a module, the next task is "Run `/sf-new-module <name>`". The next task is a tracer bullet: the thinnest end-to-end path, with fake data, proving the shape works. Keep each task under 400 changed lines, and name any `factory.json` `loadBearing` path a task must change
 5. Write the test list (each test, its layer, the bug it catches) and the three decisions you are least confident about, each with what would show it's wrong
 6. Add checkpoints between phases
 7. If the plan changes a load-bearing path, run the `critic` agent on it and include its output

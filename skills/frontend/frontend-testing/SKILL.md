@@ -5,7 +5,7 @@ description: How tests are written in a react-rspack project — what each layer
 
 # Testing
 
-Rstest (Rspack-based, configured in `rstest.config.ts`, which reuses `rspack.config.ts`) with happy-dom, React Testing Library and MSW. `pnpm test` runs it. Tests sit next to the source: `vehiclesMappers.ts` → `vehiclesMappers.test.ts`.
+Rstest (Rspack-based, configured in `rstest.config.ts`, which reuses `rspack.config.ts`) with happy-dom, React Testing Library and MSW. `pnpm test` runs it. Tests sit next to the source: `vehicleMappers.ts` → `vehicleMappers.test.ts`. The template's worked example (`src/data/commands/`, `src/data/vehicles/`, `src/modules/command-center/`) has a test of every kind below.
 
 - Import test APIs explicitly from `@rstest/core` (`describe`, `it`, `expect`, `rs`); there are no globals. `restoreMocks` is on, so spies reset between tests.
 - `src/test/setup.ts` registers the jest-dom matchers and runs the MSW server for every test file.
@@ -23,11 +23,12 @@ Every task is test-first, by the same agent: write a failing test, watch it fail
 
 | Layer | Test | Fakes |
 |---|---|---|
-| `mappers`, `model.ts`, `src/shared/lib` | unit | none; pure functions |
-| `repository` | unit | MSW for REST |
-| `store` | unit, the most important one | `createTestQueryClient()`, a plain-object fake repository, the fake socket. Push socket events, assert `qc.getQueryData(...)` |
-| `hooks` | `renderHookWithProviders`, when no component test covers the hook well | the module's real store, MSW, the fake socket |
-| `ui` and user flows | integration (RTL) via `renderWithProviders` | MSW for REST + the fake socket. Never mock hooks, the store or `httpClient` |
+| mappers, `model.ts`, `src/shared/lib`, `src/state` | unit | none; pure functions |
+| a store | unit, the most important one | `createStores({ http: httpClient, realtime: createFakeRealtimeConnection(), flushMs: 20 })`, MSW for REST. `mount()` the query, push socket events, assert `getSnapshot().data` |
+| stores together | unit (`src/data/stores.test.ts`) | the same. A write in one store, the other store's query refetched through the event |
+| `src/data/core` | unit | none, or `rs.useFakeTimers()` for GC |
+| `hooks` | `renderHookWithProviders`, when no component test covers the hook well | real stores, MSW, the fake socket |
+| `ui` and user flows | integration (RTL) via `renderWithProviders` | MSW for REST + the fake socket. Never mock hooks, a store or `httpClient` |
 
 Only the network is fake. Everything between a component and the network runs for real, so a test fails when any layer breaks.
 
@@ -35,54 +36,58 @@ Only the network is fake. Everything between a component and the network runs fo
 
 | Helper | From | Use |
 |---|---|---|
-| `renderWithProviders(ui, { modules, route })` | `@/test/render` | Renders like the app: a fresh `QueryClient` (no retries), the fake socket, the real store of each module in `modules`, a router at `route`. Returns `{ user, qc, socket, …render result }` |
-| `renderHookWithProviders(hook, { modules })` | `@/test/render` | The same providers around `renderHook`. Returns `{ result, qc, socket, … }` |
-| `createTestQueryClient()` | `@/test/render` | The cache for a store test |
-| `server`, `apiUrl(path)` | `@/test/server` | MSW. `server.use(http.get(apiUrl("/vehicles"), …))` in the test that needs it. No default handlers, and an unhandled request fails the test |
+| `renderWithProviders(ui, { route, appState, flushMs })` | `@/test/render` | Renders like the app: every real store from `createStores()` over MSW, the fake socket, fresh app state (`appState: { fleetId: "f1" }`), a router at `route`. `flushMs` defaults to 0. Returns `{ user, socket, stores, state, …render result }` |
+| `renderHookWithProviders(hook, options)` | `@/test/render` | The same providers around `renderHook`. Returns `{ result, socket, stores, state, … }` |
+| `server`, `apiUrl(path)` | `@/test/server` | MSW. `server.use(http.post(apiUrl("/vehicles/liveinfo"), …))` in the test that needs it. No default handlers, and an unhandled request fails the test |
 | `createFakeRealtimeConnection()` | `@/shared/realtime/testing` | The fake socket: `emit(channel, topic, payload)`, `setStatus()`, `subscriptions()` |
-| `build<Entity>()`, `buildApi<Entity>()` | the module's `testing.ts` | Valid data with overrides: `buildVehicle({ speedKmh: 81 })`. Only tests import `testing.ts` (dependency-cruiser) |
+| `buildApi<Entity>()` | the domain's `src/data/<domain>/testing.ts` | Valid wire data with overrides: `buildApiVehicleLive({ vehicleid: "v2" })`. Only tests import `testing.ts` (dependency-cruiser) |
 
 If a project from before these helpers lacks one, add it to `src/test/` in the shape above before writing the test that needs it.
 
 ## How a test reads
 
 ```tsx
-describe("VehicleList", () => {
-  it("vehicles/REQ-2: updates a speed live when the socket reports it", async () => {
-    server.use(http.get(apiUrl("/vehicles"), () => HttpResponse.json([buildApiVehicle()])))
-    const { socket } = renderWithProviders(<VehicleList />, { modules: [vehiclesModule] })
-    await screen.findByText("Truck 1: 0 km/h")
+describe("CommandPanel", () => {
+  it("command-center/REQ-2: shows the vehicle as immobilized when the socket reports it", async () => {
+    server.use(http.post(apiUrl("/vehicles/liveinfo"), () => HttpResponse.json([buildApiVehicleLive({ vehicleid: "v1" })])))
+    const { socket } = renderWithProviders(<CommandPanel fleetId="f1" vehicleId="v1" />)
+    expect(await screen.findByText(/Mobile/)).toBeInTheDocument()
 
-    socket.emit("pubsub", "vehicle.speed", { id: "v1", speedKmh: 30 })
+    socket.emit("pubsub", "combinfo/v1", { parsedcandata: { immobilization_status: { pidvalue: 1 } } })
 
-    expect(await screen.findByText("Truck 1: 30 km/h (moving)")).toBeInTheDocument()
+    expect(await screen.findByText(/Immobilized/)).toBeInTheDocument()
   })
 
-  it("recovers from a failed load when the user retries", async () => {
+  it("lets the user retry when the commands fail to load", async () => {
     server.use(
-      http.get(apiUrl("/vehicles"), () => new HttpResponse(null, { status: 500 }), { once: true }),
-      http.get(apiUrl("/vehicles"), () => HttpResponse.json([buildApiVehicle()]))
+      http.post(apiUrl("/commands/listcommandsbyvehicle"), () => new HttpResponse(null, { status: 500 }), { once: true }),
+      http.post(apiUrl("/commands/listcommandsbyvehicle"), () => HttpResponse.json([buildApiCommand()]))
     )
-    const { user } = renderWithProviders(<VehicleList />, { modules: [vehiclesModule] })
+    const { user } = renderWithProviders(<CommandPanel fleetId="f1" vehicleId="v1" />)
 
-    await user.click(await screen.findByRole("button", { name: "Retry" }))
+    await user.click(await screen.findByRole("button", { name: "Try again" }))
 
-    expect(await screen.findByText("Truck 1: 0 km/h")).toBeInTheDocument()
+    expect(await screen.findByRole("button", { name: "Immobilize" })).toBeInTheDocument()
   })
 })
 ```
 
 ```ts
-it("vehicles/REQ-2: patches a vehicle's speed in the cache when the socket reports it", async () => {
-  const qc = createTestQueryClient()
+it("vehicles/REQ-3: applies a burst of socket messages in one update after the flush", async () => {
+  server.use(http.post(apiUrl("/vehicles/liveinfo"), () => HttpResponse.json([buildApiVehicleLive({ vehicleid: "v1" })])))
   const realtime = createFakeRealtimeConnection()
-  const repo = { list: async () => [buildVehicle({ id: "v1", speedKmh: 0 })] }
-  const store = new VehiclesStore({ qc, repo, socket: createVehiclesSocket(realtime) })
-  await qc.fetchQuery(store.listOptions())
+  const { vehicles } = createStores({ http: httpClient, realtime, flushMs: 20 })
+  const live = vehicles.getLiveInfo("f1")
+  live.mount()
+  await waitFor(() => expect(realtime.subscriptions()).toEqual(["pubsub/combinfo/v1"]))
+  let updates = 0
+  live.subscribe(() => updates++)
 
-  realtime.emit("pubsub", "vehicle.speed", { id: "v1", speedKmh: 55 })
+  realtime.emit("pubsub", "combinfo/v1", { parsedcandata: { immobilization_status: { pidvalue: 1 } } })
+  realtime.emit("pubsub", "combinfo/v1", { utctime: 5000 })
 
-  expect(qc.getQueryData(keys.list())).toEqual([buildVehicle({ id: "v1", speedKmh: 55 })])
+  await waitFor(() => expect(live.getSnapshot().data?.v1?.immobilized).toBe(true))
+  expect(updates).toBe(1)
 })
 ```
 
@@ -90,6 +95,7 @@ it("vehicles/REQ-2: patches a vehicle's speed in the cache when the socket repor
 
 **Shape**
 - One `describe` per unit (component, store, function); one behaviour per `it`.
+- A store test outside React starts a query with `observer.mount()` and ends it with `unmount()`; `subscribe()` only listens.
 - Arrange, act, assert, separated by blank lines. The setup a reader needs is in the test, not hidden in a `beforeEach`; helpers only do plumbing (providers, builders).
 - Builders override only the fields the test is about, so the test shows what matters.
 - No comments in tests. If a test needs one, rename it.
@@ -102,7 +108,7 @@ it("vehicles/REQ-2: patches a vehicle's speed in the cache when the socket repor
 - Assert what the user or caller sees: rendered text and roles, returned values, cache contents. Never assert which internal function was called, or component state.
 - Every test must catch a real bug if it fails. If you can't name the bug, delete the test. A test without an assertion is not a test.
 - Cover empty, error and boundary states: an empty list, a failed request, a socket disconnect, a delta for an unknown id, `null` from the API.
-- No snapshots. Don't assert CSS classes unless the style is the feature. Don't test that React, TanStack Query or a library works.
+- No snapshots. Don't assert CSS classes unless the style is the feature. Don't test that React, the cache in `src/data/core` or a library works; test what your store does with them.
 
 **Queries and interaction**
 - Find elements as a user would, in this order: `getByRole` (with `name`), `getByLabelText`, `getByText`, then the rest. `getByTestId` only when nothing visible identifies the element. Never `container.querySelector`.
@@ -111,7 +117,7 @@ it("vehicles/REQ-2: patches a vehicle's speed in the cache when the socket repor
 - `queryBy…` only to assert something is absent.
 
 **Network, time and mocks**
-- REST only through MSW handlers declared in the test. Never mock `httpClient`, a repository used by a component, a hook or the store.
+- REST only through MSW handlers declared in the test. Never mock `httpClient`, a store or a hook.
 - Socket traffic only through the fake socket.
 - Fixed time: `rs.useFakeTimers()` and `rs.setSystemTime(...)` when behaviour depends on now; pass `{ advanceTimers: rs.advanceTimersByTime }` to `userEvent.setup` if a UI test also uses fake timers. Never depend on the real clock or time zone.
 - `rs.mock` only for a third-party boundary that has no fake, and say which in the test name's subject.

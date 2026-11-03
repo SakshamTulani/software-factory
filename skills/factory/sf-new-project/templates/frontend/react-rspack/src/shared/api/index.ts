@@ -1,1 +1,1 @@
-export { httpClient, setAuthToken } from "./httpClient"
+export { type HttpClient, httpClient, setAuthToken } from "./httpClient"

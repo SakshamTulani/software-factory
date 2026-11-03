@@ -1,8 +1,8 @@
 ---
-status: accepted
+status: superseded
 date: 2026-10-30
 deciders: sakshamtulani
-superseded-by:
+superseded-by: 0024
 ---
 
 # 0019. Tests reach real stores through module providers, with standard helpers

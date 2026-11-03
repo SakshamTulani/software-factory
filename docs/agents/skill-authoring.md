@@ -19,7 +19,7 @@ description: Scaffold a module … Use when a plan task says to run sf-new-modul
 | Kind | Name | Front matter |
 |---|---|---|
 | A step the user starts, or that changes state with a gate (`sf-spec`, `sf-plan`, `sf-build`, `sf-ship`, `sf-new-project` …) | `sf-` prefix, so it can't clash with Claude Code's built-in commands | `disable-model-invocation: true` |
-| A step another skill runs (`sf-setup` from `sf-new-project`, `sf-new-module` from `sf-build`) | `sf-` prefix | no flag |
+| A step another skill runs (`sf-setup` from `sf-new-project`, `sf-new-store` and `sf-new-module` from `sf-build`) | `sf-` prefix | no flag |
 | Knowledge Claude loads by description (`frontend-architecture`, forked Addy skills) | plain name | no flag |
 
 ## Rules

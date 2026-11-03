@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react"
 
 import { App } from "./App"
 
-it("shows the empty state while no module is registered", async () => {
+it("links to every registered module from the navigation", async () => {
   render(<App />)
 
-  expect(await screen.findByText(/No modules yet/)).toBeInTheDocument()
+  expect(await screen.findByRole("link", { name: "Command center" })).toBeInTheDocument()
 })

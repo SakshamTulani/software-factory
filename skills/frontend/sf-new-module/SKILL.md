@@ -1,47 +1,37 @@
 ---
 name: sf-new-module
-description: Scaffold a module under src/modules/ with every layer from the frontend-architecture skill, empty test stubs and its index.ts. Use when a plan task says to run sf-new-module, or when the user asks to add a module.
+description: Scaffold a feature module under src/modules/ (ui, hooks, model.ts, module.tsx) with empty test stubs, and register it in src/app/modules.ts. Use when a plan task says to run sf-new-module, or when the user asks to add a module or screen.
 ---
 
 # New module
 
-Creates `src/modules/<name>/` with every layer and nothing else. Behaviour comes later, test first, in the plan's next tasks.
+Creates `src/modules/<name>/` with every layer from the `frontend-architecture` skill and nothing else. Behaviour comes later, test first, in the plan's next tasks.
+
+A module is a feature: screens and rules. Its data comes from stores in `src/data/`. If the spec needs a backend domain no store covers yet, run `/sf-new-store` for it first.
 
 ## Inputs
 
 - `<name>`: kebab-case, from the approved spec (`command-center`). If the user or task gives none, stop and ask.
-- `<camel>` = camelCase of the name (`commandCenter`); `<Pascal>` = PascalCase (`CommandCenter`).
+- `<camel>` = camelCase of the name (`commandCenter`); `<Title>` = the spec's name for it (`Command center`).
 
 Stop and ask if `src/modules/<name>/` already exists.
 
 ## Files
 
-Follow the `frontend-architecture` skill for every rule; this is the empty shape of it.
+Follow `frontend-architecture` for every rule; this is the empty shape of it. `src/modules/command-center/` is the worked example.
 
 ```
 src/modules/<name>/
-├── types.ts                         export type <Pascal>Placeholder = never   (replace with the spec's entities)
-├── model.ts                         import type only from ./types; no functions yet
-├── api/<camel>Api.ts                imports only from @/shared/api; DTO types named Api<Entity>
-├── mappers/<camel>Mappers.ts
-├── mappers/<camel>Mappers.test.ts
-├── repository/<camel>Repository.ts
-├── repository/<camel>Repository.test.ts
-├── realtime/<camel>Socket.ts
-├── store/<camel>Store.ts            the keys object + a class taking { qc, repo, socket }
-├── store/<camel>Store.test.ts
-├── hooks/<camel>StoreContext.tsx    the store's context: <Pascal>StoreProvider and use<Pascal>Store() (frontend-architecture)
-├── ui/                              empty until a task adds a component
-├── testing.ts                       test builders, one per entity as the spec adds them: build<Entity>(overrides), buildApi<Entity>(overrides)
-├── module.tsx                       <Pascal>Provider builds the store from deps; export const <camel>Module: AppModule =
-│                                    { featureId: "<name>", title: "<Title>", routes: [], Provider: <Pascal>Provider }
-│                                    (AppModule, AppDeps from "@/shared/lib/app-module")
-└── index.ts                         export { <camel>Module } from "./module"; nothing else yet
+├── ui/              .gitkeep, until a task adds a component
+├── hooks/           .gitkeep, until a task adds a hook
+├── model.ts         a comment saying it holds pure business rules; no functions yet
+├── model.test.ts    one describe("<name> model") with a single it.todo("…")
+├── module.tsx       export const <camel>Module: AppModule = { featureId: "<name>", title: "<Title>", routes: [] }
+│                    (AppModule from "@/shared/lib/app-module")
+└── index.ts         export { <camel>Module } from "./module"; nothing else yet
 ```
 
-Each `*.test.ts` stub holds one `describe` naming the layer and a single `it.todo("…")`. Never write a passing test with no assertion; the plan's tasks replace the todos.
-
-The empty `ui/` folder gets a `.gitkeep`. `testing.ts` starts with a comment saying what it is for and no exports.
+Never write a passing test with no assertion; the plan's tasks replace the todo.
 
 ## Register it
 

@@ -47,5 +47,5 @@ What could go wrong (reconnects, stale cache, high-frequency updates, permission
 
 Ordered by dependency. After any scaffolding, the first task is a tracer bullet: the thinnest path from API to screen, with fake or minimal data, proving the shape works end to end. Each later task replaces a fake or adds one behaviour. Each task fits in one session, touches about five files or fewer, stays under 400 changed lines, and ends with `pnpm check` green. Name any `loadBearing` path (`factory.json`) a task must change; `/sf-build auto` stops before changing one the plan doesn't name. Publish them to the tracker ([issue-tracker.md](../../agents/issue-tracker.md)); this list is the source.
 
-- [ ] **1** <for a new module: "Run `/sf-new-module <name>`"; otherwise the tracer bullet> _(REQ-1)_
+- [ ] **1** <for a new backend domain: "Run `/sf-new-store <name>`"; for a new module: "Run `/sf-new-module <name>`"; otherwise the tracer bullet> _(REQ-1)_
 - [ ] **2** <tracer bullet, or a small, verifiable change> _(REQ-1, REQ-2)_

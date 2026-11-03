@@ -15,7 +15,7 @@ Performance rules for React applications, from Vercel's guide with its Next.js a
 
 Reference these guidelines when:
 - Writing new React components or hooks
-- Wiring data into components (in this project, through store query options and hooks)
+- Wiring data into components (in this project, through hooks over the stores in `src/data/`)
 - Reviewing code for performance issues
 - Refactoring existing React code
 - Optimizing bundle size or load times
@@ -128,6 +128,6 @@ Each rule file contains:
 
 ## This project
 
-- **Data fetching goes through the store.** Components never fetch; they read TanStack Query data through hooks built on the store's query options (see `frontend-architecture`). TanStack Query already de-duplicates requests, which is why upstream's SWR rule was removed.
-- **Real-time updates arrive through `setQueryData` in the store.** For re-render cost, prefer `select` in the hook over memoising in the component (`rerender-derived-state`).
+- **Data fetching goes through the stores.** Components never fetch; they read a store's query through hooks built on `useQuery` from `@/bindings/react` (see `frontend-architecture`). The shared cache in `src/data/core` already de-duplicates requests, which is why upstream's SWR rule was removed.
+- **Real-time updates arrive through the store,** which buffers socket deltas and applies them in one update. For re-render cost, select one item with `useQuerySelector` in the hook rather than memoising in the component (`rerender-derived-state`).
 - **Code splitting:** lazy-load heavy components and module routes with `React.lazy` (`bundle-dynamic-imports`); use `rspack-split-chunks` when tuning chunks.

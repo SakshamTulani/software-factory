@@ -22,7 +22,7 @@ Invoke the incremental-implementation skill alongside test-driven-development.
 ## Default: one task
 
 1. Read the task's acceptance criteria and the `REQ-<n>` ids it cites.
-2. **If the task says to run `/sf-new-module <name>`, run that skill**, then run `pnpm check` and go to step 7. Scaffolding has no behaviour of its own to test first.
+2. **If the task says to run `/sf-new-store <name>` or `/sf-new-module <name>`, run that skill**, then run `pnpm check` and go to step 7. Scaffolding has no behaviour of its own to test first.
 3. Load relevant context: the project's architecture skill (`frontend-architecture`), existing code, patterns, `types.ts`.
 4. Write a failing test for the expected behaviour, named after its requirement (RED).
 5. Implement the minimum code to pass it (GREEN).

@@ -21,7 +21,7 @@ The grid sorts and filters the **raw value** in the row, and shows it through a 
 
 So:
 
-1. **Rows hold raw, typed values.** Dates and times are `Date`, epoch milliseconds or ISO-8601 strings; durations are milliseconds; quantities are numbers; states are their code (`"critical"`, not "Critical ⚠"). The module's mapper converts whatever the API sends into these (`frontend-architecture`). Never format in the mapper, the store or the hook.
+1. **Rows hold raw, typed values.** Dates and times are `Date`, epoch milliseconds or ISO-8601 strings; durations are milliseconds; quantities are numbers; states are their code (`"critical"`, not "Critical ⚠"). The domain's mapper in `src/data/` converts whatever the API sends into these (`frontend-architecture`). Never format in the mapper, the store or the hook.
 2. **Every column declares a `kind`**, which TypeScript requires. The kind sets the comparator, the filter and the formatter together (`data-grid/columns.ts`):
 
 | `kind` | Raw value | Sorts | Filter | Shows |
@@ -94,7 +94,7 @@ export function VehiclesTable() {
 
 ## Live data
 
-- Rows come from the TanStack Query cache, which the store patches from the WebSocket (`frontend-architecture`). Pass the new array as `rows`; `rowId` lets AG Grid update the changed rows in place instead of redrawing, keeping scroll, sort, filter and selection.
+- Rows come from a store's query, which the store patches from the WebSocket (`frontend-architecture`). Pass the new array as `rows`; `rowId` lets AG Grid update the changed rows in place instead of redrawing, keeping scroll, sort, filter and selection.
 - `rowId` must be stable and unique: the entity's id, never an index.
 - Don't put `rows` through `useMemo` that recreates every row object on each update; give the grid the cache's objects so unchanged rows stay unchanged.
 

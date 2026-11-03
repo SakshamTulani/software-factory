@@ -1,137 +1,162 @@
 /**
- * Architecture rules for the react-rspack template.
+ * Architecture rules for the react-rspack template (the frontend-architecture skill).
  *
- * Each module under src/modules/<name>/ is a vertical slice in three tiers.
- * A tier may import from the tiers below it, never from the tiers above:
+ *   src/app/        composition root: builds stores and app state, mounts modules
+ *   src/modules/    features: ui → hooks → model.ts
+ *   src/bindings/   the only React glue for stores and app state
+ *   src/data/       server state, plain TypeScript, one folder per backend domain:
+ *                     <domain>Store → <domain>Mappers → types.ts
+ *                     core/ (the cache), events.ts, stores.ts (createStores)
+ *   src/state/      app state (what the user picked), plain TypeScript
+ *   src/shared/     infrastructure with no domain knowledge
  *
- *   PRESENTATION   ui → hooks
- *   BUSINESS       model.ts           (pure business rules)
- *   DATA ACCESS    store → repository → api
- *                    │  └─→ realtime ─→ mappers
- *   ─────────────────────────────────────────────
- *   CONTRACT       types.ts           (domain entity types, no logic; every tier may use it)
+ * - Data never imports business logic, React, app state or features.
+ * - Outside src/data/, import it only through @/data (src/data/index.ts).
+ * - A domain imports another domain only through that domain's index.ts.
+ * - Components read data through hooks; ui/ and model.ts may import entity types only.
  *
- * - Data access never imports business logic: store, repository, realtime, mappers and
- *   api must not import model.ts. Business hooks apply model.ts to store data.
- * - api owns the raw REST calls and their DTO types; mappers turn DTOs (REST and WS)
- *   into types.ts entities and merge WS deltas.
- * - store is the single source of truth: it writes REST results and WS deltas into
- *   the TanStack Query cache. Only store and hooks may touch TanStack Query.
- * - Other modules may import only through a module's index.ts.
- *
- * Test files are exempt from the layer rules (a store test needs fakes of lower layers).
+ * Test files are exempt from the layer rules (a test needs builders and fakes).
  */
 
 const MODULE = "^src/modules/([^/]+)/"
+const DOMAIN = "^src/data/([^/]+)/"
 const TEST = "\\.test\\.tsx?$"
-
-// Paths of each layer *within the same module* as the importer ($1).
-const LAYER_PATH = {
-  api: "api/",
-  mappers: "mappers/",
-  repository: "repository/",
-  realtime: "realtime/",
-  store: "store/",
-  hooks: "hooks/",
-  ui: "ui/",
-  model: "model(\\.ts$|/)",
-  types: "types(\\.ts$|/)",
-}
-
-const ALL = Object.keys(LAYER_PATH)
-const except = (...allowed) => ALL.filter((l) => !allowed.includes(l))
-
-function layerRule(from, forbidden, comment) {
-  return {
-    name: `layer-${from}`,
-    severity: "error",
-    comment,
-    from: { path: `${MODULE}${LAYER_PATH[from]}`, pathNot: TEST },
-    to: {
-      path: `^src/modules/$1/(${forbidden.map((l) => LAYER_PATH[l]).join("|")})`,
-    },
-  }
-}
+const FRAMEWORK =
+  "node_modules/(react|react-dom|react-router|react-router-dom|@radix-ui|radix-ui|ag-grid-[^/]+)/"
 
 module.exports = {
   forbidden: [
-    layerRule(
-      "types",
-      except("types"),
-      "types.ts is the contract every tier shares: entity types only, importing nothing from the module."
-    ),
-    layerRule(
-      "model",
-      except("model", "types"),
-      "model.ts holds pure business rules over types.ts entities."
-    ),
-    layerRule(
-      "api",
-      except("api"),
-      "api does raw HTTP and owns its DTO types. Convert DTOs in mappers/."
-    ),
-    layerRule(
-      "mappers",
-      except("mappers", "api", "types"),
-      "mappers turn api/ DTOs and WS payloads into types.ts entities. Data access never imports model.ts."
-    ),
-    layerRule(
-      "repository",
-      except("repository", "api", "mappers", "types"),
-      "repository combines api + mappers and returns types.ts entities. Data access never imports model.ts."
-    ),
-    layerRule(
-      "realtime",
-      except("realtime", "mappers", "types"),
-      "realtime subscribes to WS topics and emits mapped entities. It knows nothing about the cache."
-    ),
-    layerRule(
-      "store",
-      except("store", "repository", "realtime", "mappers", "types"),
-      "store reaches data through repository/ and realtime/, merging deltas with mappers/. Data access never imports model.ts."
-    ),
-    layerRule(
-      "hooks",
-      except("hooks", "store", "model", "types"),
-      "hooks read data through the store's query options and apply model.ts rules."
-    ),
-    layerRule(
-      "ui",
-      except("ui", "hooks", "model", "types"),
-      "Components get data from hooks/, never from the store or the network."
-    ),
+    // ── modules: ui → hooks → model.ts ──
     {
-      name: "business-and-types-are-pure",
+      name: "module-ui",
       severity: "error",
-      comment: "model.ts and types.ts must not depend on React, TanStack Query or the WS client.",
-      from: { path: `${MODULE}(${LAYER_PATH.model}|${LAYER_PATH.types})` },
-      to: { path: "node_modules/(react|react-dom|@tanstack|fmswsclientjs)/" },
+      comment:
+        "Components get data from hooks/, never from @/bindings or a store. They may import entity types from @/data.",
+      from: { path: `${MODULE}ui/`, pathNot: TEST },
+      to: { path: "^src/(bindings|state)/" },
     },
     {
-      name: "query-only-in-store-and-hooks",
+      name: "module-ui-types-only",
       severity: "error",
-      comment: "Only store/ and hooks/ may use TanStack Query. Components call a hook.",
-      from: {
-        // app-module types the QueryClient a module's Provider receives; src/test builds one per test.
-        path: "^src/",
-        pathNot: [
-          `${MODULE}(store|hooks)/`,
-          "^src/app/",
-          "^src/shared/lib/app-module\\.tsx$",
-          "^src/test/",
-          TEST,
-        ],
-      },
-      to: { path: "node_modules/@tanstack/(react-query|query-core)/" },
+      comment: "Components may import entity types from @/data, never a store or createStores.",
+      from: { path: `${MODULE}ui/`, pathNot: TEST },
+      to: { path: "^src/data/", dependencyTypesNot: ["type-only"] },
     },
     {
-      name: "ws-client-only-in-realtime",
+      name: "module-hooks",
       severity: "error",
-      comment: "Only realtime/ (and the shared socket setup) may use the WS client.",
-      from: {
-        path: "^src/",
-        pathNot: [`${MODULE}realtime/`, "^src/shared/realtime/", "^src/app/", TEST],
+      comment: "hooks read stores and app state through @/bindings/react and apply model.ts.",
+      from: { path: `${MODULE}hooks/`, pathNot: TEST },
+      to: { path: `^src/modules/$1/ui/` },
+    },
+    {
+      name: "module-model",
+      severity: "error",
+      comment:
+        "model.ts holds pure business rules over entity types: no React, no stores, no hooks, no ui.",
+      from: { path: `${MODULE}model(\\.ts$|/)`, pathNot: TEST },
+      to: { path: `^src/(modules/$1/(ui|hooks)/|bindings/|state/|app/)` },
+    },
+    {
+      name: "module-model-types-only",
+      severity: "error",
+      comment: "model.ts may import entity types from @/data, never a store.",
+      from: { path: `${MODULE}model(\\.ts$|/)`, pathNot: TEST },
+      to: { path: "^src/data/", dependencyTypesNot: ["type-only"] },
+    },
+    {
+      name: "module-model-pure",
+      severity: "error",
+      comment: "model.ts must not depend on React or the WS client.",
+      from: { path: `${MODULE}model(\\.ts$|/)` },
+      to: { path: `${FRAMEWORK}|node_modules/fmswsclientjs/` },
+    },
+
+    // ── data: plain TypeScript, by domain ──
+    {
+      name: "data-is-plain",
+      severity: "error",
+      comment:
+        "src/data/ is server state in plain TypeScript: no React, no UI library, no app state, no features. Bindings live in src/bindings/.",
+      from: { path: "^src/data/" },
+      to: { path: `${FRAMEWORK}|^src/(modules|app|bindings|state)/` },
+    },
+    {
+      name: "data-never-imports-business-logic",
+      severity: "error",
+      comment: "Stores and mappers never import model.ts; business hooks apply it to store data.",
+      from: { path: "^src/data/" },
+      to: { path: "^src/modules/[^/]+/model(\\.ts$|/)" },
+    },
+    {
+      name: "data-via-index",
+      severity: "error",
+      comment: "Outside src/data/, import the data layer only through @/data.",
+      from: { path: "^src/", pathNot: ["^src/data/", "^src/test/", TEST] },
+      to: { path: "^src/data/", pathNot: "^src/data/index\\.ts$" },
+    },
+    {
+      name: "domain-via-index",
+      severity: "error",
+      comment:
+        "A domain imports another domain only through its index.ts. Writes affecting another domain go through events.ts.",
+      from: { path: DOMAIN, pathNot: ["^src/data/core/", TEST] },
+      to: {
+        path: "^src/data/[^/]+/",
+        pathNot: ["^src/data/$1/", "^src/data/[^/]+/index\\.ts$", "^src/data/core/"],
       },
+    },
+    {
+      name: "mappers-only-types",
+      severity: "error",
+      comment: "Mappers are pure conversion: they import only their domain's types.ts.",
+      from: { path: `${DOMAIN}[^/]*Mappers\\.ts$` },
+      to: { path: "^src/", pathNot: "^src/data/$1/types\\.ts$" },
+    },
+    {
+      name: "schemas-only-types",
+      severity: "error",
+      comment:
+        "schemas.ts describes valid write inputs: it imports only zod and its domain's types.ts.",
+      from: { path: `${DOMAIN}schemas\\.ts$` },
+      to: { path: "^src/", pathNot: "^src/data/$1/types\\.ts$" },
+    },
+    {
+      name: "domain-types-import-nothing",
+      severity: "error",
+      comment: "types.ts is the contract every tier shares: entity types only.",
+      from: { path: `${DOMAIN}types\\.ts$` },
+      to: { path: "^src/" },
+    },
+    {
+      name: "core-is-self-contained",
+      severity: "error",
+      comment: "src/data/core/ is the shared cache. It knows nothing about domains or the app.",
+      from: { path: "^src/data/core/", pathNot: TEST },
+      to: { path: "^src/", pathNot: "^src/data/core/" },
+    },
+
+    // ── state, bindings, shared ──
+    {
+      name: "state-is-plain",
+      severity: "error",
+      comment: "src/state/ is app state in plain TypeScript and imports nothing else from src/.",
+      from: { path: "^src/state/", pathNot: TEST },
+      to: { path: `${FRAMEWORK}|^src/(?!state/)` },
+    },
+    {
+      name: "bindings-know-no-features",
+      severity: "error",
+      comment: "src/bindings/ connects React to stores and app state; it knows no module or app.",
+      from: { path: "^src/bindings/" },
+      to: { path: "^src/(modules|app)/" },
+    },
+    {
+      name: "ws-client-only-in-shared-realtime",
+      severity: "error",
+      comment:
+        "Only src/shared/realtime/ uses the WS client. Stores receive the connection in createStores.",
+      from: { path: "^src/", pathNot: ["^src/shared/realtime/", TEST] },
       to: { path: "node_modules/fmswsclientjs/" },
     },
     {
@@ -179,9 +204,10 @@ module.exports = {
     {
       name: "shared-is-leaf",
       severity: "error",
-      comment: "shared/ is used by modules; it must not import modules or app.",
+      comment:
+        "shared/ is infrastructure: it must not import data, state, bindings, modules or app.",
       from: { path: "^src/shared/" },
-      to: { path: "^src/(modules|app)/" },
+      to: { path: "^src/(modules|app|data|state|bindings)/" },
     },
     {
       name: "no-circular",

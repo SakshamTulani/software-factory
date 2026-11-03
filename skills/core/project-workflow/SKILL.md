@@ -37,9 +37,9 @@ If you're unsure, take the full path.
 | `file-pr` | `file-pr` | the PR (both PRs under `develop-main`), from the PR template |
 | `/sf-retro` (optional) | `sf-retro` | after a session that was harder than it should have been: proposed checks, pointers and review rules; factory issues for factory skills. `/sf-retro 30d` monthly |
 
-**Other commands**, any time: `/sf-test` (TDD on its own, the light path), `/sf-simplify` (simplify recent changes without changing behaviour), `/sf-constraints` (write or check `CONSTRAINTS.md`), `/sf-webperf` (performance audit), `/sf-transcribe` (save the session), `/sf-upstream` (read business and API context from upstream, or request a contract change), `/sf-setup` (switch tracker, git strategy, conversation log or upstream sources). `/sf-new-module` runs inside `/sf-build` when a plan task names it.
+**Other commands**, any time: `/sf-test` (TDD on its own, the light path), `/sf-simplify` (simplify recent changes without changing behaviour), `/sf-constraints` (write or check `CONSTRAINTS.md`), `/sf-webperf` (performance audit), `/sf-transcribe` (save the session), `/sf-upstream` (read business and API context from upstream, or request a contract change), `/sf-setup` (switch tracker, git strategy, conversation log or upstream sources). `/sf-new-store` and `/sf-new-module` run inside `/sf-build` when a plan task names them.
 
-**A new module starts with `/sf-spec`, not with scaffolding.** The spec settles the module's name, boundary, endpoints and WS topics. The plan's first task is `/sf-new-module <name>`, run during `/sf-build`.
+**A new module starts with `/sf-spec`, not with scaffolding.** The spec settles the module's name, boundary, endpoints and WS topics, and which stores in `src/data/` serve them. The plan's first tasks are `/sf-new-store <name>` for each new backend domain, then `/sf-new-module <name>`, run during `/sf-build`.
 
 **Gates are recorded in front matter.** `/sf-plan` does not start until `spec.md` says `status: approved`. `/sf-build` does not start until `plan.md` says `status: approved`. Only a human sets `approved`. Agents never approve their own work.
 

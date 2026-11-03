@@ -6,7 +6,7 @@ Decisions that shape the factory and every project it generates. Numbered and ne
 |---|---|---|
 | [0001](0001-distribute-the-factory-as-a-plugin.md) | superseded by 0007 | Client repos install the factory as a Claude Code plugin; templates are copied once, skills are not |
 | [0002](0002-use-addy-agent-skills-for-the-lifecycle.md) | superseded by 0007 | The lifecycle is Addy's agent-skills; the factory adds project glue only |
-| [0003](0003-tanstack-query-as-the-store-owned-cache.md) | accepted | Frontend stores write REST and WebSocket data into TanStack Query |
+| [0003](0003-tanstack-query-as-the-store-owned-cache.md) | superseded by 0024 | Frontend stores write REST and WebSocket data into TanStack Query |
 | [0004](0004-data-access-never-imports-business-logic.md) | accepted | Three-tier modules with `types.ts` split from `model.ts`, enforced by dependency-cruiser |
 | [0005](0005-single-agent-tdd-with-test-review.md) | accepted | One agent writes test then code; a test-engineer reviews |
 | [0006](0006-specs-with-requirement-ids-and-an-index.md) | superseded by 0017 | Addy's spec format plus permanent `REQ-NNN` ids and a specs index |
@@ -22,8 +22,9 @@ Decisions that shape the factory and every project it generates. Numbered and ne
 | [0016](0016-one-format-module-for-displayed-values.md) | accepted | Dates, times, durations and numbers are formatted only in `src/shared/lib/format.ts`, enforced by dependency-cruiser and a Biome rule |
 | [0017](0017-named-specs-and-dated-adrs.md) | accepted | Specs named by slug (`docs/specs/<slug>/`, `feat/<slug>`), `REQ-<n>` per spec cited as `<slug>/REQ-<n>`, project ADRs named by date; no shared counters |
 | [0018](0018-sf-retro-from-matt-pocock.md) | accepted | `/sf-retro`, forked from Matt Pocock's `retro`, proposes environment fixes and drafts sf-factory issues for factory ones |
-| [0019](0019-tests-reach-real-stores-through-module-providers.md) | accepted | No store singletons: each module's `Provider` builds its store, so tests use real stores with a fresh cache and the fake socket; `src/test/` helpers; one way to write a test, lint-enforced |
+| [0019](0019-tests-reach-real-stores-through-module-providers.md) | superseded by 0024 | No store singletons: each module's `Provider` builds its store, so tests use real stores with a fresh cache and the fake socket; `src/test/` helpers; one way to write a test, lint-enforced |
 | [0020](0020-trust-controls-from-addy-osmanis-factory.md) | accepted | From Addy's factory: prove new tests, human read of changed tests and load-bearing paths, git guard hook, fresh-context verifier and critic, `check:fast`/`check:deep`, `/sf-retro 30d` |
 | [0021](0021-happy-dom-21-ahead-of-rstests-range.md) | accepted | happy-dom 21.0.4 for its two high-advisory fixes, allowed past Rstest's `^20` peer range in `pnpm-workspace.yaml` |
 | [0022](0022-upstream-sources-for-business-and-api-context.md) | accepted | Projects list upstream sources (backend repos, OpenAPI, docs) via `/sf-setup`; `sf-upstream` reads them live with cited SHAs and files `spec-request` issues on the backend repo; frontend specs and ADRs record frontend decisions only |
 | [0023](0023-ask-before-every-load-bearing-edit.md) | accepted | `guard-load-bearing.sh` (PreToolUse on Edit/Write) reads `factory.json` `loadBearing` and asks before every edit to those paths or to `factory.json`; rule stated in `AGENTS.md` and `project-workflow` |
+| [0024](0024-store-first-data-layer-over-a-shared-cache.md) | accepted | `src/data/` holds one class store per backend domain over the shared cache copied from the earlier frontend; stores talk through events; app state in `src/state/`; `src/bindings/react/` is the only React glue; TanStack Query and Zustand removed; `sf-new-store`; a worked example in the template |

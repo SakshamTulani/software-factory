@@ -33,3 +33,6 @@ export const httpClient = {
   delete: async <T>(url: string, opts?: RequestOptions) =>
     (await instance.delete<T>(url, opts)).data,
 }
+
+/** The shape stores take in their deps, so tests and other clients can stand in. */
+export type HttpClient = typeof httpClient

@@ -35,7 +35,7 @@ Lead with the recommended answer where there is one, so the user can accept it i
 
    | Template | Stack |
    |---|---|
-   | `frontend/react-rspack` | Rspack, React 19, TanStack Query (store-owned cache), WebSocket client, Tailwind v4 + shadcn, AG Grid Community 36, React Router 7, Zustand, Rstest + happy-dom + RTL + MSW, Biome, dependency-cruiser |
+   | `frontend/react-rspack` | Rspack, React 19, class stores over a shared cache in `src/data/` (no TanStack Query), WebSocket client, Tailwind v4 + shadcn, AG Grid Community 36, React Router 7, Rstest + happy-dom + RTL + MSW, Biome, dependency-cruiser |
 5. **Design system** (frontend only): list `design-systems/README.md`'s table. Recommend `intellicar-default`.
 6. **Project name**: kebab-case. Recommend `<client>-<product>`.
 7. **Git remote**: where the repo will live.
@@ -90,7 +90,10 @@ Write `factory.json`:
   "loadBearing": [
     "package.json",
     "src/app/App.tsx",
-    "src/app/queryClient.ts",
+    "src/data/core/**",
+    "src/data/events.ts",
+    "src/data/stores.ts",
+    "src/bindings/**",
     "src/shared/api/**",
     "src/shared/config/**",
     "src/shared/realtime/**",
@@ -115,7 +118,7 @@ Run the `sf-setup` skill. It asks about the tracker, the git strategy, the conve
 
 ## 8. Done
 
-- Run `pnpm install` (it fetches the private `intellicars/fmswsclientjs`, so it needs the same git access as step 1), then `pnpm check` and `pnpm build`, and report the result. A fresh project must be green: no modules, the shell's own tests passing.
+- Run `pnpm install` (it fetches the private `intellicars/fmswsclientjs`, so it needs the same git access as step 1), then `pnpm check` and `pnpm build`, and report the result. A fresh project must be green: the shell's tests and the worked example's (the `commands` and `vehicles` stores and the `command-center` module) passing. Tell the user the example shows how stores, events, app state and a module fit together, and that it is replaced or deleted once the first spec lands (`frontend-architecture`).
 - If the design system isn't `intellicar-default`, re-map the tokens in `src/index.css` from the new `DESIGN.md` with the `shadcn` skill ("apply this DESIGN.md"). The template's `index.css` carries `intellicar-default`'s tokens.
 - Tell the user to copy `.env.example` to `.env` and fill in the URLs, and, for CI, to add a read-only `GH_PAT` repository secret so `.github/workflows/ci.yml` can fetch `fmswsclientjs`.
 - Show `git status`, then offer, as one question, to commit and push. Do neither without a yes.
