@@ -9,25 +9,46 @@ import { ReactRefreshRspackPlugin } from "@rspack/plugin-react-refresh"
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const isDev = process.env.NODE_ENV === "development"
 
+const fromFile = (file: string) =>
+  fs.existsSync(file)
+    ? fs
+        .readFileSync(file, "utf8")
+        .split("\n")
+        .filter((line) => line && !line.startsWith("#") && line.includes("="))
+        .map((line) => {
+          const [key, ...rest] = line.split("=")
+          return [key?.trim() ?? "", rest.join("=").trim()] as const
+        })
+    : []
+
 /** `.env` then `.env.local`, OS env last. Only `PUBLIC_*` reaches the browser. */
 function publicEnv(): Record<string, string> {
-  const fromFile = (file: string) =>
-    fs.existsSync(file)
-      ? fs
-          .readFileSync(file, "utf8")
-          .split("\n")
-          .filter((line) => line && !line.startsWith("#") && line.includes("="))
-          .map((line) => {
-            const [key, ...rest] = line.split("=")
-            return [key?.trim() ?? "", rest.join("=").trim()] as const
-          })
-      : []
   const merged = Object.fromEntries([
     ...fromFile(path.resolve(__dirname, ".env")),
     ...fromFile(path.resolve(__dirname, ".env.local")),
     ...Object.entries(process.env).map(([k, v]) => [k, v ?? ""] as const),
   ])
   return Object.fromEntries(Object.entries(merged).filter(([k]) => k.startsWith("PUBLIC_")))
+}
+
+/**
+ * What the browser bundle sees for each `process.env.PUBLIC_*`. Every name in
+ * `.env.example` is defined, as `undefined` when unset or blank, so `src/shared/config/env.ts`
+ * falls back to its default instead of the browser failing on `process`. A new
+ * PUBLIC_* variable goes in `.env.example` too.
+ */
+function publicDefines(): Record<string, string> {
+  const values = publicEnv()
+  const declared = fromFile(path.resolve(__dirname, ".env.example"))
+    .map(([key]) => key)
+    .filter((key) => key.startsWith("PUBLIC_"))
+  const names = new Set([...declared, ...Object.keys(values)])
+  return Object.fromEntries(
+    [...names].map((name) => [
+      `process.env.${name}`,
+      values[name] ? JSON.stringify(values[name]) : "undefined",
+    ])
+  )
 }
 
 const swc = (tsx: boolean): SwcLoaderOptions => ({
@@ -54,11 +75,7 @@ export default defineConfig({
   },
   plugins: [
     new HtmlRspackPlugin({ template: "./index.html" }),
-    new DefinePlugin(
-      Object.fromEntries(
-        Object.entries(publicEnv()).map(([k, v]) => [`process.env.${k}`, JSON.stringify(v)])
-      )
-    ),
+    new DefinePlugin(publicDefines()),
     isDev && new ReactRefreshRspackPlugin(),
   ],
   devServer: { port: 3000, historyApiFallback: true, hot: true },
